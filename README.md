@@ -28,3 +28,33 @@ Implement the app with the following core modules:
    - A simple one-click modular generator that outputs promotional copy or social posts based on targeted customer data found inside the CRM.
 
 Ensure all modules are scaffolded cleanly into independent components so a 4-person team can work on them simultaneously without merge conflicts. Let's begin scaffolding the project structure.
+
+
+[NEW CLAUDE PROMPT MADE WITH RESPECT TO THE SOLVIMON]
+Let's use forge-plain to scaffold "ForgeCRM"—a usage-based AI CRM engineered specifically to maximize monetization for B2B scaleups, tailored for the Solvimon commercial-viability track.
+
+Tech Stack: Next.js (App Router), Tailwind CSS, Supabase.
+
+Implement these highly optimized modules to highlight immediate business value:
+
+1. LANGUAGE-DRIVEN MONETIZATION DASHBOARD (Solvimon Focus):
+   - A command-bar focused UI allowing founders to query commercial data (e.g., typing "show expected revenue this month" displays metrics).
+   - An analytics view mapping user conversion metrics directly to flexible, usage-based pricing tiers (simulating a Solvimon billing integration).
+
+2. CONVERSION-OPTIMIZED REAL ESTATE CO-PILOT:
+   - A sales workspace with a chat context simulator.
+   - AI evaluates past successful interactions to auto-suggest optimal, high-converting messaging strategies to sales reps.
+   - Accepting a suggestion auto-updates the lead pipeline status in the DB.
+
+3. CUSTOMIZABLE SUPPORT & RETENTION AGENT:
+   - An intake form for customer issues.
+   - The AI triages, logs an automated report, and determines if it can solve the issue immediately (retaining the customer) or if it requires human escalation.
+
+4. SOCIAL LISTENING LEAD FINDER:
+   - A target-term lead scanner dashboard (e.g., tracking keywords like "Kingston property").
+   - Includes custom notification alerts to ensure instantaneous reaction time to new buyer signals.
+
+5. AI CONTENT & PITCH GENERATOR:
+   - A content generation tool targeted at turning lookalike leads into paying accounts with custom outbound marketing text.
+
+Focus heavily on clean modular code blocks so we can rapidly iterate using codeplain during the hackathon. Let's initiate the project structure.
