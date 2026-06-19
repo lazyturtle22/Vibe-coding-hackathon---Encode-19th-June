@@ -1,4 +1,5 @@
 # Vibe-coding-hackathon---Encode-19th-June
+[CLAUDE PROMPT]
 Let's use forge-plain to build a modular, AI-native CRM system called "ModularAI-CRM" designed for high-speed customer acquisition and automated retention. 
 
 Our timeframe is ultra-short (1.5 days), so generate highly modular, clean, and immediately executable Next.js (App Router), Tailwind CSS, and Supabase-ready code.
