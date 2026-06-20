@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "verify": "tsx ../.claude/skills/engine-verify/scripts/verify.mts",
-    "smoke": "tsx scripts/engine-smoke.mts"
+    "smoke": "tsx scripts/engine-smoke.mts",
+    "hero": "tsx scripts/hero-loop.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",

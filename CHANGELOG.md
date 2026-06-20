@@ -7,6 +7,26 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [test · Coder B] End-to-end hero-loop harness (`npm run hero`)
+
+**Commit scope:** `scripts/hero-loop.mts` (new), `package.json`.
+
+- Proves both hero moments + the quote-to-cash sync **offline**, via the exact canned
+  fallbacks the demo drops to when the API fails/times out. 7 checks, all green:
+  - every `RULE_PILLS` prompt resolves to its dedicated fallback (never the generic) —
+    guards against a pill/fallback drift that would silently neuter the demo;
+  - pill[0] corrective → +£37,950 / 4 accounts; pill[1] enterprise → all 3 Enterprise
+    contracts grandfathered, `protectedMonthly === 0`; pill[2] retention → 3 at-risk
+    accounts, −£1,499 (Harbor floors at £0);
+  - copilot fallback quote projects the **exact** engine numbers (Scale @ 1.4M units →
+    steady £9,649/mo, ramp £6,649/mo, ARR £106,788, margin 41%);
+  - sending the quote provisions Lumen and the 360 invoice reconciles (base + £3k ramp
+    credit floors at £0, credit line attributed);
+  - the `emit_pricing_rule` / `emit_quote` tool input_schemas are well-formed object
+    schemas — an **offline partial de-risk of bug #4** (full check still needs a live key).
+- Run: `cd forgecrm && npm run hero`.
+- **Revert effect:** removes the harness + npm entry (no app behavior change).
+
 ## [style] Sidebar: bigger brand mark, no tagline, full-height nav (design feedback)
 
 **Commit scope:** `components/app-shell.tsx`.
