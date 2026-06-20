@@ -7,6 +7,20 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [fix · bug #3 · med] Grandfather "protected" now counts only shielded increases
+
+**Commit scope:** `lib/simulate.ts`, `app/pricing/page.tsx`.
+
+- **Problem:** `protectedMonthly` summed `Σ |wouldBeDelta|`, so a rule that would *lower*
+  an existing contract's bill (e.g. the Enterprise volume-discount-plus-cap, where the cap
+  dominates) was reported as "£X/mo protected" — implying customer benefit when
+  grandfathering actually keeps them paying more. The framing read backwards.
+- **Fix:** `protectedMonthly` now sums only shielded *increases* (`Σ max(0, wouldBeDelta)`).
+  The pricing page relabels each protected row honestly — "shielded from +£X/mo increase"
+  vs "£X/mo discount not applied" — and the header reads "keeps N existing contract(s) on
+  current terms" instead of "protects".
+- **Revert effect:** restores the `Σ |wouldBeDelta|` headline and "protects" wording.
+
 ## [fix · bug #2 · med] `applyRule` flags only accounts whose invoice actually changes
 
 **Commit scope:** `lib/store.ts`.

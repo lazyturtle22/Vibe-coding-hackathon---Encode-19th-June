@@ -182,15 +182,16 @@ export default function PricingPage() {
                 <Card className="gap-0 border-amber-100 bg-amber-50/40 p-0">
                   <div className="flex items-center gap-2 border-b border-amber-100 px-4 py-2.5 text-sm font-medium text-amber-800">
                     <ShieldCheck className="size-4" />
-                    Grandfathering protects {sim.protectedRows.length} existing contract(s)
+                    Grandfathering keeps {sim.protectedRows.length} existing contract(s) on current terms
                   </div>
                   <div className="divide-y divide-amber-100">
                     {sim.protectedRows.map((r) => (
                       <div key={r.accountId} className="flex items-center justify-between px-4 py-2 text-sm">
                         <span className="font-medium">{r.accountName}</span>
                         <span className="tabular-nums text-amber-700">
-                          would be {r.wouldBeDelta > 0 ? "+" : "−"}
-                          {formatGBP(Math.abs(r.wouldBeDelta))}/mo · kept on current terms
+                          {r.wouldBeDelta > 0
+                            ? `shielded from +${formatGBP(r.wouldBeDelta)}/mo increase`
+                            : `${formatGBP(Math.abs(r.wouldBeDelta))}/mo discount not applied`}
                         </span>
                       </div>
                     ))}

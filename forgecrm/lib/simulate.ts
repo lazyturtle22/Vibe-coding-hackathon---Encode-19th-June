@@ -25,7 +25,10 @@ export interface SimResult {
   totalDelta: number;
   affected: SimRow[];
   protectedRows: ProtectedRow[];
-  protectedMonthly: number; // Σ |wouldBeDelta| shielded by grandfathering
+  // £/mo that grandfathering genuinely SHIELDS the book from — i.e. the sum of the
+  // *increases* withheld from existing contracts. Discounts withheld (wouldBeDelta < 0)
+  // are NOT "protection" for the customer, so they don't count here (bug #3).
+  protectedMonthly: number;
   representative?: { accountId: string; accountName: string; before: Invoice; after: Invoice };
 }
 
@@ -75,7 +78,11 @@ export function simulateRule(data: DataView, rule: PricingRule): SimResult {
     totalDelta: roundPence(affected.reduce((s, r) => s + r.delta, 0)),
     affected,
     protectedRows,
-    protectedMonthly: roundPence(protectedRows.reduce((s, r) => s + Math.abs(r.wouldBeDelta), 0)),
+    // only shielded INCREASES count as "protected" (bug #3) — a withheld discount is
+    // not protection for the customer.
+    protectedMonthly: roundPence(
+      protectedRows.reduce((s, r) => s + Math.max(0, r.wouldBeDelta), 0),
+    ),
     representative: repBest,
   };
 }
