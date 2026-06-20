@@ -24,6 +24,7 @@ import type {
   Task,
 } from "@/types";
 import { ruleApplies } from "./engine";
+import { demoNowISO, resetDemoClock } from "./clock";
 import * as seed from "@/data/seed";
 
 let _idCounter = 0;
@@ -118,6 +119,7 @@ export const useStore = create<StoreState>()(
 
       resetToSeed: () => {
         _idCounter = 0;
+        resetDemoClock(); // re-seeded demo is byte-identical to the first run
         set({ ...makeSeedState() });
       },
 
@@ -191,7 +193,8 @@ export const useStore = create<StoreState>()(
           id: existing ? existing.id : newId("sub"),
           accountId: input.accountId,
           planId: input.planId,
-          startedAt: nowISO(),
+          // engine input → demo clock (deterministic), not the wall clock (bug #1)
+          startedAt: demoNowISO(),
           ruleOverrides: input.effects,
         };
         set((s) => ({

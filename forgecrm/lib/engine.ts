@@ -15,9 +15,12 @@ import type {
   Subscription,
 } from "@/types";
 import { roundPence } from "./format";
+import { DEMO_NOW } from "./clock";
 
 // Fixed "now" for the demo so proration/grandfathering are deterministic (§3.1).
-export const BILLING_NOW = new Date("2026-06-20T00:00:00Z");
+// Sourced from the shared demo clock (lib/clock.ts) so the engine and the entities
+// the app stamps at runtime (new subscriptions/rules) agree on a single "now".
+export const BILLING_NOW = DEMO_NOW;
 export const PERIOD_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
 export const PERIOD_LABEL = "Jun 2026";

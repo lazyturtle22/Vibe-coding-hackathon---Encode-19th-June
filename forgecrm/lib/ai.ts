@@ -14,6 +14,7 @@ import {
   type PricingRule,
 } from "@/types";
 import { fallbackQuote, fallbackRule } from "./fallbacks";
+import { demoNowISO } from "./clock";
 
 export type AISource = "ai" | "fallback";
 
@@ -21,10 +22,18 @@ export type AISource = "ai" | "fallback";
 export function materializeRule(compiled: AICompiledRule): PricingRule {
   return {
     ...compiled,
-    id: `rule-${Date.now().toString(36)}-${Math.abs(hash(compiled.sourcePrompt)).toString(36)}`,
-    createdAt: new Date().toISOString(), // newest source → wins conflicts, beats legacy rules
+    id: `rule-${Math.abs(hash(compiled.sourcePrompt + idSeq())).toString(36)}`,
+    // engine input → demo clock: strictly increasing so "newest source wins" is
+    // deterministic and always beats the legacy seed rule (bug #1).
+    createdAt: demoNowISO(),
     active: true,
   };
+}
+
+let _ruleSeq = 0;
+function idSeq(): string {
+  _ruleSeq += 1;
+  return `:${_ruleSeq}`;
 }
 
 function hash(s: string): number {
