@@ -63,20 +63,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <TooltipProvider>
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="hidden w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
-          <div className="flex items-center gap-2.5 px-5 py-5">
+        <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
+          <div className="flex items-center gap-3 px-5 py-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/forge-crm-icon.svg"
               alt="ForgeCRM"
-              className="size-9 rounded-lg shadow-sm ring-1 ring-white/10"
+              className="size-12 rounded-xl shadow-sm ring-1 ring-white/10"
             />
-            <div className="leading-tight">
-              <div className="text-sm font-semibold text-white">ForgeCRM</div>
-              <div className="text-[11px] text-brand-cyan/80">pricing as a sentence</div>
-            </div>
+            <div className="text-2xl font-semibold tracking-tight text-white">ForgeCRM</div>
           </div>
-          <nav className="flex-1 space-y-0.5 px-3 py-2">
+          <nav className="flex flex-1 flex-col justify-evenly overflow-y-auto px-3 py-3">
             {NAV.map((item) => {
               const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -85,13 +82,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                    "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] transition-colors",
                     active
                       ? "bg-indigo-500/15 font-medium text-white"
                       : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
                   )}
                 >
-                  <Icon className={cn("size-4", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
+                  <Icon className={cn("size-[18px]", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
                   {item.label}
                   {"hero" in item && item.hero && (
                     <span className="ml-auto rounded bg-indigo-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-300">
@@ -102,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <div className="px-4 py-4 text-[11px] text-slate-500">
+          <div className="px-5 py-4 text-[11px] text-slate-500">
             Solvimon track · GBP · 30-day periods
           </div>
         </aside>

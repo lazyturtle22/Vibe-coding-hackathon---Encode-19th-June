@@ -7,6 +7,19 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [style] Sidebar: bigger brand mark, no tagline, full-height nav (design feedback)
+
+**Commit scope:** `components/app-shell.tsx`.
+
+- Logo `size-9` → `size-12`; title `text-sm` → `text-2xl`; removed the
+  "pricing as a sentence" tagline.
+- The nav previously clustered in the top ~50% with a large void beneath. The sidebar is
+  now pinned to the viewport (`sticky top-0 h-screen`) and the nav uses
+  `flex justify-evenly`, so all eight items distribute evenly across the full height with
+  no dead space — and none fall below the fold on long, scrolling pages. Nav items are a
+  touch larger (`py-2.5`, `text-[15px]`, `size-[18px]` icons).
+- **Revert effect:** restores the small top-aligned nav, the tagline, and the smaller mark.
+
 ## [test · Coder A] Exact-number engine smoke harness (`npm run smoke`)
 
 **Commit scope:** `scripts/engine-smoke.mts` (new), `package.json`.
