@@ -7,6 +7,20 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [fix · bug #2 · med] `applyRule` flags only accounts whose invoice actually changes
+
+**Commit scope:** `lib/store.ts`.
+
+- **Problem:** `applyRule` pushed every account the rule's audience matched
+  (`ruleApplies`) and logged a `rule_applied` activity for each — even when the rule
+  didn't move the bill (e.g. a volume discount on an account below the threshold). The
+  pricing page's toast/affected count uses `simulateRule` (`delta !== 0`), so the two
+  disagreed.
+- **Fix:** `applyRule` now computes the invoice total before vs after the rule and flags
+  the account only when the total changes — same semantics as the simulation. (`computeInvoice`
+  replaces the `ruleApplies` import.)
+- **Revert effect:** restores audience-match-only flagging.
+
 ## [fix · bug #1 · med] Deterministic demo clock — remove the wall clock from billing inputs
 
 **Commit scope:** `lib/clock.ts` (new), `lib/engine.ts`, `lib/store.ts`, `lib/ai.ts`.
