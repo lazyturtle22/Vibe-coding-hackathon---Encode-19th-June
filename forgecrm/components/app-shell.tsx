@@ -13,7 +13,6 @@ import {
   CheckSquare,
   LifeBuoy,
   RotateCcw,
-  Flame,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -64,14 +63,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <TooltipProvider>
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="hidden w-60 shrink-0 flex-col border-r bg-slate-950 text-slate-200 md:flex">
-          <div className="flex items-center gap-2 px-5 py-5">
-            <div className="flex size-8 items-center justify-center rounded-md bg-indigo-500 text-white">
-              <Flame className="size-4" />
-            </div>
+        <aside className="hidden w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
+          <div className="flex items-center gap-2.5 px-5 py-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/forge-crm-icon.svg"
+              alt="ForgeCRM"
+              className="size-9 rounded-lg shadow-sm ring-1 ring-white/10"
+            />
             <div className="leading-tight">
               <div className="text-sm font-semibold text-white">ForgeCRM</div>
-              <div className="text-[11px] text-slate-400">pricing as a sentence</div>
+              <div className="text-[11px] text-brand-cyan/80">pricing as a sentence</div>
             </div>
           </div>
           <nav className="flex-1 space-y-0.5 px-3 py-2">
@@ -109,7 +111,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-background/80 px-6 backdrop-blur">
             <div className="flex items-center gap-2 md:hidden">
-              <Flame className="size-4 text-indigo-500" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-6 rounded-md" />
               <span className="font-semibold">ForgeCRM</span>
             </div>
             <div className="ml-auto flex items-center gap-3">
