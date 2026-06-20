@@ -104,7 +104,7 @@ export function mergeEffects(
   }
 
   const merged: MergedEffects = { credits: [], appliedRuleIds: [] };
-  const winner = <T>(curOrder: number | undefined, newOrder: number): boolean =>
+  const winner = (curOrder: number | undefined, newOrder: number): boolean =>
     curOrder == null || newOrder >= curOrder;
 
   for (const { effect, src } of tagged) {

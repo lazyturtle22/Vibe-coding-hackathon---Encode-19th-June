@@ -27,7 +27,7 @@ import type {
 export const plans: PricingPlan[] = [
   { id: "plan-starter", name: "Starter", tier: 1, basePrice: 99, includedUnits: 10_000, unitPrice: 0.02, unitCost: 0.006, cogsPct: 20 },
   { id: "plan-growth", name: "Growth", tier: 2, basePrice: 499, includedUnits: 100_000, unitPrice: 0.015, unitCost: 0.005, cogsPct: 18 },
-  { id: "plan-scale", name: "Scale", tier: 3, basePrice: 1_999, includedUnits: 500_000, unitPrice: 0.01, unitCost: 0.004, cogsPct: 15 },
+  { id: "plan-scale", name: "Scale", tier: 3, basePrice: 1_999, includedUnits: 500_000, unitPrice: 0.01, unitCost: 0.003, cogsPct: 15 },
   { id: "plan-enterprise", name: "Enterprise", tier: 4, basePrice: 6_000, includedUnits: 2_000_000, unitPrice: 0.008, unitCost: 0.003, cogsPct: 12 },
 ];
 
@@ -82,7 +82,7 @@ export const accounts: Account[] = [
   { id: "acc-quartz", name: "Quartz Design", industry: "Design", planId: "plan-starter", monthlyUsageUnits: 25_000, healthScore: 60, ownerName: "Elena Rossi", tagIds: [], contactIds: ["con-quartz-1"], createdAt: "2025-03-06T00:00:00Z" },
 
   // -- Copilot prospect (no subscription yet; created on Send Quote) -----------
-  { id: "acc-lumen", name: "Lumen AI", industry: "AI / ML", planId: "plan-growth", monthlyUsageUnits: 60_000, healthScore: 70, ownerName: "Marcus Webb", tagIds: ["tag-newlogo", "tag-expansion"], contactIds: ["con-lumen-1", "con-lumen-2"], createdAt: "2026-05-28T00:00:00Z" },
+  { id: "acc-lumen", name: "Lumen AI", industry: "AI / ML", planId: "plan-growth", monthlyUsageUnits: 200_000, healthScore: 70, ownerName: "Marcus Webb", tagIds: ["tag-newlogo", "tag-expansion"], contactIds: ["con-lumen-1", "con-lumen-2"], createdAt: "2026-05-28T00:00:00Z" },
 ];
 
 // ── Subscriptions (the billed entity) ────────────────────────────────────────
