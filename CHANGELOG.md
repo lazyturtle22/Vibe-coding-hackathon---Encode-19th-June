@@ -7,6 +7,24 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [test · Coder A] Exact-number engine smoke harness (`npm run smoke`)
+
+**Commit scope:** `scripts/engine-smoke.mts` (new), `package.json`.
+
+- Pure engine/seed harness (no store, no network, no API key) asserting the **exact**
+  demo numbers and the invariants behind the fixes above. 11 checks, all green:
+  - frozen demo clock wired (bug #1);
+  - leakage total === £37,950 and each account's leak (Northwind £12k / Brightwave £9.75k
+    / Harbor £8.7k / Cobalt £7.5k);
+  - corrective rule re-prices exactly 4 accounts for +£37,950 and drives leakage to £0;
+  - Orbital base prorated to £999.50 (15/30 days);
+  - Enterprise rule grandfathers Vertex/Meridian/Atlas, and `protectedMonthly === 0`
+    because it's a net discount (bug #3);
+  - a no-op rule flags 0 accounts (mirrors bug #2);
+  - determinism + every total `>= 0` and pence-rounded.
+- Run: `cd forgecrm && npm run smoke`. Complements the generic `npm run verify` harness.
+- **Revert effect:** removes the smoke script and its npm entry (no app behavior change).
+
 ## [fix · bug #6 · low] `totalRecoverable` requires explicit rows (no silent seed read)
 
 **Commit scope:** `lib/leakage.ts`.
