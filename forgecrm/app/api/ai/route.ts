@@ -83,8 +83,10 @@ async function compileRule(prompt: string): Promise<{ result: AICompiledRule; so
     );
     const parsed = AICompiledRuleSchema.safeParse(toolInput(msg));
     if (parsed.success) return { result: { ...parsed.data, sourcePrompt: prompt }, source: "ai" };
-  } catch {
-    /* fall through to fallback */
+    // Validated-output miss: log why so a funded key that still falls back is diagnosable.
+    console.error("[ai] rule compile output failed Zod validation:", JSON.stringify(parsed.error.issues));
+  } catch (err) {
+    console.error("[ai] rule compile call failed, using fallback:", (err as Error)?.message ?? err);
   }
   return { result: fallbackRule(prompt), source: "fallback" };
 }
@@ -114,8 +116,9 @@ async function buildQuote(body: {
     );
     const parsed = AIQuoteSchema.safeParse(toolInput(msg));
     if (parsed.success) return { result: parsed.data, source: "ai" };
-  } catch {
-    /* fall through to fallback */
+    console.error("[ai] quote output failed Zod validation:", JSON.stringify(parsed.error.issues));
+  } catch (err) {
+    console.error("[ai] quote call failed, using fallback:", (err as Error)?.message ?? err);
   }
   return { result: fallbackQuote(), source: "fallback" };
 }

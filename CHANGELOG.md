@@ -7,6 +7,20 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [fix · Coder B] Hero-loop resilience — client AI timeout + server failure logging
+
+**Commit scope:** `lib/ai.ts`, `app/api/ai/route.ts`.
+
+- **Client timeout:** `postAI` had no timeout, so a hung `/api/ai` route would spin the
+  Compile / Build button forever. Added a 12s `AbortController` (just over the server's 8s
+  SDK timeout) — on abort the client drops to the keyed fallback like any other failure, so
+  the UI can never hang on stage.
+- **Server logging:** the route swallowed every failure silently (`catch {}`). It now
+  `console.error`s the reason — both API errors and Zod-validation misses — so that once the
+  key is funded, a call that *still* falls back is diagnosable (directly supports closing the
+  blocked bug #4). The client-facing response shape is unchanged.
+- **Revert effect:** restores the un-timed client fetch and the silent server catch.
+
 ## [test · Coder B] End-to-end hero-loop harness (`npm run hero`)
 
 **Commit scope:** `scripts/hero-loop.mts` (new), `package.json`.
