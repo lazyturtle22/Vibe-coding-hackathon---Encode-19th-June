@@ -13,6 +13,9 @@ npm install
 npm run dev          # http://localhost:3000
 npm run build        # production build
 npm run verify       # prove the billing engine reconciles against seed data
+npm run smoke        # assert the EXACT demo numbers (leakage £37,950, proration, grandfathering)
+npm run hero         # end-to-end hero-loop assertions (both AI moments + quote-to-cash, fully offline)
+npm run check        # verify + smoke + hero in one go (pre-demo gate)
 ```
 
 **AI is optional for the demo.** The two real LLM calls (rule compiler, quote builder) run through the single
@@ -45,7 +48,7 @@ demo works fully offline** — a live API failure is invisible on stage.
 3. **Pricing engine → Leakage finder** — "we're undercharging 4 accounts by £37,950." Click **Draft corrective rule**.
 4. **The hero** — the corrective sentence compiles to a structured rule; the engine re-prices and the **£37,950
    turns from leaked to recovered**. Hit **Apply**. Then fire the Enterprise volume-discount pill to show the same
-   engine handles deliberate strategy — **grandfathering protects 3 existing contracts (£9,040/mo)**.
+   engine handles deliberate strategy — **grandfathering keeps 3 existing Enterprise contracts on their current terms**.
 5. **Quote-to-cash copilot** — on a live deal, the copilot extracts the projected 1.4M units/mo and builds a hybrid
    quote (ramp-up credits + volume discount) with **engine-derived ARR (£106,788) and margin (41%)**. **Send Quote**
    advances the deal *and* provisions a subscription — the account immediately bills correctly in Customer 360.

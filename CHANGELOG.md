@@ -7,6 +7,18 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [docs · Coder B] Aggregate `npm run check` + README sync
+
+**Commit scope:** `package.json`, `README.md`.
+
+- Added `npm run check` = `verify && smoke && hero` (31 assertions total) as a single
+  pre-demo / pre-push gate for the 4-coder team.
+- README documents the three harnesses, and the demo-script line for the Enterprise rule is
+  corrected to "grandfathering keeps 3 existing Enterprise contracts on their current terms"
+  — the old "(£9,040/mo protected)" figure contradicted the bug #3 fix (it's a withheld
+  discount, not a shielded increase, so `protectedMonthly` is now £0).
+- **Revert effect:** removes the `check` script and reverts the README wording.
+
 ## [fix · Coder B] Hero-loop resilience — client AI timeout + server failure logging
 
 **Commit scope:** `lib/ai.ts`, `app/api/ai/route.ts`.
