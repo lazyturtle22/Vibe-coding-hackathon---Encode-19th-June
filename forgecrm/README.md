@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ForgeCRM
 
-## Getting Started
+**The CRM where pricing logic is authored in plain English, and every sales action is a billing action.**
 
-First, run the development server:
+Hackathon build (Solvimon track). The hero is a natural-language pricing engine: you type a sentence,
+Claude compiles it to a structured ruleset, and a **deterministic, auditable billing engine** shows the
+revenue impact across your whole customer book — every invoice line traceable to the sentence that caused it.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
+npm run build        # production build
+npm run verify       # prove the billing engine reconciles against seed data
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**AI is optional for the demo.** The two real LLM calls (rule compiler, quote builder) run through the single
+server route `app/api/ai/route.ts` via Claude tool-use. Set a key to use real Claude:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.local.example .env.local   # then put your key in ANTHROPIC_API_KEY
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Without a key, the app falls back to deterministic objects keyed to the demo prompt-pills, so **the entire
+demo works fully offline** — a live API failure is invisible on stage.
 
-## Learn More
+## Architecture (the decisions that matter)
 
-To learn more about Next.js, take a look at the following resources:
+- **Client SPA + exactly one server route.** Every page is `"use client"`; a Zustand store (persisted to
+  localStorage) is the single source of truth. Next.js earns its keep for file-based routing and the one
+  server route that holds `ANTHROPIC_API_KEY` and calls the LLM.
+- **The billing engine is deterministic and pure** (`lib/engine.ts` → `computeInvoice`). No AI in the math.
+  Same inputs → identical itemized invoice, hand-traceable. `npm run verify` asserts the spec invariants
+  (pence rounding, total = Σ rounded lines floored at 0, per-line rule attribution, ~£38k leakage band).
+- **AI only at the edges.** English → `PricingRule` and sales thread → `Quote`, both forced via Claude
+  tool-use with a Zod-derived `input_schema`, re-validated with Zod, with canned fallbacks.
+- **One schema source for the DSL** (`types/pricing.ts`): the TypeScript types *and* the Claude tool schema
+  are both derived from the same Zod definitions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 3-minute demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Dashboard** — pipeline, MRR, and **£37,950/mo recoverable leakage** at a glance.
+2. **Customer 360 → Billing** — an itemized hybrid invoice; hover a discount line to see the English rule behind it.
+3. **Pricing engine → Leakage finder** — "we're undercharging 4 accounts by £37,950." Click **Draft corrective rule**.
+4. **The hero** — the corrective sentence compiles to a structured rule; the engine re-prices and the **£37,950
+   turns from leaked to recovered**. Hit **Apply**. Then fire the Enterprise volume-discount pill to show the same
+   engine handles deliberate strategy — **grandfathering protects 3 existing contracts (£9,040/mo)**.
+5. **Quote-to-cash copilot** — on a live deal, the copilot extracts the projected 1.4M units/mo and builds a hybrid
+   quote (ramp-up credits + volume discount) with **engine-derived ARR (£106,788) and margin (41%)**. **Send Quote**
+   advances the deal *and* provisions a subscription — the account immediately bills correctly in Customer 360.
 
-## Deploy on Vercel
+A visible **Reset to seed** restores pristine demo state. Single currency GBP, 30-day periods.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `../forgecrm-spec.md` for the full architecture, DSL, and engine spec.
