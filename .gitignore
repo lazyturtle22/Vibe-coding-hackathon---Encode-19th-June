@@ -1,0 +1,47 @@
+# ─── Dependencies ───────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+.yarn/install-state.gz
+
+# ─── Next.js / build output ─────────────────────────────────────
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# ─── Environment & secrets (NEVER commit ANTHROPIC_API_KEY) ──────
+.env
+.env.*
+!.env.example
+
+# ─── Logs ───────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Caches & tooling ───────────────────────────────────────────
+.cache/
+.turbo/
+.eslintcache
+.vercel
+coverage/
+.nyc_output/
+
+# ─── OS & editor cruft ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# ─── Claude Code (keep shared automations; ignore local overrides) ─
+.claude/settings.local.json
+.claude/**/*.local.json

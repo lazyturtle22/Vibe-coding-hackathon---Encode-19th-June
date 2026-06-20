@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [".claude/hooks/check-key-boundary.mjs"],
+            "timeout": 10,
+            "statusMessage": "Checking API-key boundary"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [".claude/hooks/lint-on-edit.mjs"],
+            "timeout": 90,
+            "statusMessage": "Lint + type-check"
+          }
+        ]
+      }
+    ]
+  }
+}
