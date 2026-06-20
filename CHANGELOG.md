@@ -7,6 +7,24 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [fix · bug #6 · low] `totalRecoverable` requires explicit rows (no silent seed read)
+
+**Commit scope:** `lib/leakage.ts`.
+
+- **Problem:** `totalRecoverable(rows = findLeakage())` defaulted to the seed baseline, so a
+  no-arg call would ignore applied rules and report the wrong figure. (No live bug today —
+  the UI passes store data — but a latent footgun.)
+- **Fix:** `rows` is now required. `findLeakage`'s seed defaults are kept (the engine-verify
+  harness calls `findLeakage()` no-arg) and documented as harness-only.
+- **Revert effect:** restores the `= findLeakage()` default on `totalRecoverable`.
+
+## [fix · bug #5 · trivial] Remove dead no-op in `formatGBPDelta`
+
+**Commit scope:** `lib/format.ts`.
+
+- Removed the `.replace("£", "£")` no-op. Pure cleanup, no behavior change.
+- **Revert effect:** re-adds the no-op.
+
 ## [fix · bug #3 · med] Grandfather "protected" now counts only shielded increases
 
 **Commit scope:** `lib/simulate.ts`, `app/pricing/page.tsx`.
