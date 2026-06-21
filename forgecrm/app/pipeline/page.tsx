@@ -38,7 +38,7 @@ export default function PipelinePage() {
         title="Sales pipeline"
         subtitle="Drag deals across stages. Moving a card logs an activity; the copilot's Send Quote advances cards here automatically."
       />
-      <div className="flex h-[calc(100vh-11rem)] gap-4 overflow-x-auto pb-2">
+      <div className="flex h-[calc(100vh-11rem)] gap-3 pb-2">
         {DEAL_STAGES.map((stage) => {
           const stageDeals = data.deals.filter((d) => d.stage === stage);
           const total = stageDeals.reduce((s, d) => s + d.value, 0);
@@ -52,7 +52,7 @@ export default function PipelinePage() {
               onDragLeave={() => setOverStage((s) => (s === stage ? null : s))}
               onDrop={() => drop(stage)}
               className={cn(
-                "flex h-full w-72 shrink-0 flex-col rounded-xl border-t-4 bg-muted/40 p-2",
+                "flex h-full min-w-0 flex-1 flex-col rounded-xl border-t-4 bg-muted/40 p-2",
                 STAGE_ACCENT[stage],
                 overStage === stage && "ring-2 ring-indigo-300",
               )}
