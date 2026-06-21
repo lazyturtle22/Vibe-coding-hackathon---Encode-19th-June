@@ -25,7 +25,7 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 |----|------|-------|--------|--------------------|
 | 0.1 | Create this task table + `V0_PROMPTS.md` + CHANGELOG pivot entry | Claude | ✅ | committed on `property-pivot` |
 | 0.2 | **Property domain data model** `types/property.ts` | Claude | ✅ | Landlord, Property, Tenant, Tenancy, Payment, MaintenanceRequest+Triage, Notice, SocialPost, ChatLog, QAEntry + label maps. tsc clean. |
-| 0.3 | **Seed data** `data/seed.ts` (replace CRM seed) | Claude | ⬜ | ~8 properties, tenants, tenancies; payments incl. late/pending; maintenance reqs; notices; social leads; chat-log/QA. Engineer 2–3 "late rent" + 1 maintenance escalation for demo. |
+| 0.3 | **Seed data** `data/property-seed.ts` (additive) | Claude | ✅ | landlord + 6 properties, 5 tenants, 4 tenancies; 8 payments (3 late: Oakfield/Millbrook/Elm + pending + paid); 3 maintenance (boiler escalated); 3 notices (auto + scheduled); 6 social posts; 2 chat logs + 4 QA. `TODAY=2026-06-21`. tsc clean. |
 | 0.4 | **Store + repository** extend for property entities + actions | Claude | ⬜ | addPayment/markPaid, addMaintenance/triage, scheduleNotice/send, saveLead/contact, addQA. Keep `resetToSeed`. |
 | 0.5 | Reframe shell + brand: tagline → "AI-native CRM for private accommodation landlords"; nav reflects property modules | Claude | ⬜ | depends on which pages survive (Phase 1) |
 | 0.6 | Dashboard → property KPIs | Claude+🅥 | ⬜ | properties, occupancy %, rent collected vs due, overdue count, open maintenance, scheduled notices |
