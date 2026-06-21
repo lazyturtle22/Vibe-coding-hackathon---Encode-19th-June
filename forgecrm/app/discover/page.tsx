@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Search, MapPin, UserPlus, Bookmark, Check } from "lucide-react";
+import { Search, MapPin, UserPlus, Bookmark, Check, Sparkles, Copy, Send, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { usePropertyData } from "@/lib/use-property-data";
 import { searchPosts, platformsIn, relativeTime } from "@/lib/aggregator";
+import { draftOutreach } from "@/lib/outreach";
 import { PLATFORM_LABEL, type LeadContactStatus, type SocialPlatform, type SocialPost } from "@/types/property";
 import { cn } from "@/lib/utils";
 
@@ -42,6 +43,25 @@ export default function DiscoverPage() {
 
   const togglePlatform = (p: SocialPlatform) =>
     setPlatforms((cur) => (cur.includes(p) ? cur.filter((x) => x !== p) : [...cur, p]));
+
+  // AI-drafted outreach per lead (Phase 8.3). Calls /api/outreach, falls back to deterministic.
+  const [drafts, setDrafts] = useState<Record<string, { message: string; fitReason: string; loading?: boolean }>>({});
+  async function draft(post: SocialPost) {
+    setDrafts((d) => ({ ...d, [post.id]: { message: "", fitReason: "", loading: true } }));
+    let result: { message: string; fitReason: string } | null = null;
+    try {
+      const res = await fetch("/api/outreach", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ post, properties: data.properties }),
+      });
+      if (res.ok) result = (await res.json()).result;
+    } catch {
+      /* fall through */
+    }
+    if (!result) result = draftOutreach(post, data.properties);
+    setDrafts((d) => ({ ...d, [post.id]: { message: result!.message, fitReason: result!.fitReason } }));
+  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -104,6 +124,9 @@ export default function DiscoverPage() {
                 <Badge variant="outline" className={cn("text-[11px] capitalize", STATUS_TONE[r.contactStatus])}>{r.contactStatus}</Badge>
               )}
               <div className="ml-auto flex gap-2">
+                <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" disabled={drafts[r.id]?.loading} onClick={() => draft(r)}>
+                  {drafts[r.id]?.loading ? <Loader2 className="size-3 animate-spin" /> : <Sparkles className="size-3" />} Draft
+                </Button>
                 {r.contactStatus === "new" && (
                   <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" onClick={() => { data.setLeadStatus(r.id, "saved"); toast.success("Saved"); }}>
                     <Bookmark className="size-3" /> Save
@@ -118,6 +141,21 @@ export default function DiscoverPage() {
                 )}
               </div>
             </div>
+            {drafts[r.id] && !drafts[r.id].loading && (
+              <div className="mt-3 rounded-lg border border-indigo-100 bg-indigo-50/40 p-3">
+                <div className="text-[11px] font-medium uppercase tracking-wide text-indigo-700">Suggested outreach</div>
+                <p className="mt-1 text-sm">{drafts[r.id].message}</p>
+                <div className="mt-1 text-xs text-muted-foreground">{drafts[r.id].fitReason}</div>
+                <div className="mt-2 flex gap-2">
+                  <Button size="sm" variant="outline" className="h-7 gap-1 text-xs" onClick={() => { navigator.clipboard?.writeText(drafts[r.id].message); toast.success("Copied"); }}>
+                    <Copy className="size-3" /> Copy
+                  </Button>
+                  <Button size="sm" className="h-7 gap-1 text-xs bg-indigo-600 hover:bg-indigo-700" onClick={() => { data.setLeadStatus(r.id, "contacted"); toast.success(`Reached out to ${r.author}`); }}>
+                    <Send className="size-3" /> Send & mark contacted
+                  </Button>
+                </div>
+              </div>
+            )}
           </Card>
         ))}
         {results.length === 0 && (

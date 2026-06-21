@@ -1,5 +1,19 @@
 # ForgeCRM — Changelog
 
+## [Phase 8 · AI] Acquisition AI — match lead to property + draft outreach (8.3)
+
+**Commit scope:** `lib/outreach.ts` (new), `app/api/outreach/route.ts` (new), `app/discover/page.tsx`.
+
+- "Get those customers": each lead on **Find tenants** gets a **Draft** button that calls
+  `/api/outreach` — Claude tool-use matches the post to the landlord's best-fitting **available**
+  property (by area + bedrooms) and writes a short, personalised first message; falls back to a
+  deterministic draft (`lib/outreach.draftOutreach`) with no key. Shows the message + a fit reason,
+  with **Copy** and **Send & mark contacted**. Verified: a Wakefield WF1 lead → "9 Rosebank Close, 3-bed
+  WF1, £1,150/mo".
+- **Revert effect:** removes the Draft button/panel, the route, and `lib/outreach.ts`.
+
+
+
 ## [Phase 8 · UX] Hover-slide sidebar + bigger logo + higher-contrast tabs (8.1)
 
 **Commit scope:** `components/app-shell.tsx`, `TASKS.md`.
