@@ -38,7 +38,7 @@ export default function PipelinePage() {
         title="Sales pipeline"
         subtitle="Drag deals across stages. Moving a card logs an activity; the copilot's Send Quote advances cards here automatically."
       />
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex h-[calc(100vh-11rem)] gap-4 overflow-x-auto pb-2">
         {DEAL_STAGES.map((stage) => {
           const stageDeals = data.deals.filter((d) => d.stage === stage);
           const total = stageDeals.reduce((s, d) => s + d.value, 0);
@@ -52,7 +52,7 @@ export default function PipelinePage() {
               onDragLeave={() => setOverStage((s) => (s === stage ? null : s))}
               onDrop={() => drop(stage)}
               className={cn(
-                "flex w-72 shrink-0 flex-col rounded-xl border-t-4 bg-muted/40 p-2",
+                "flex h-full w-72 shrink-0 flex-col rounded-xl border-t-4 bg-muted/40 p-2",
                 STAGE_ACCENT[stage],
                 overStage === stage && "ring-2 ring-indigo-300",
               )}
@@ -63,7 +63,7 @@ export default function PipelinePage() {
                   {stageDeals.length} · {formatGBPWhole(total)}
                 </span>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-1 flex-col gap-2 overflow-y-auto pr-0.5">
                 {stageDeals.map((d) => {
                   const task = data.tasks.find((t) => t.id === d.nextTaskId && !t.done);
                   return (
@@ -98,7 +98,7 @@ export default function PipelinePage() {
                   );
                 })}
                 {stageDeals.length === 0 && (
-                  <div className="rounded-lg border border-dashed py-6 text-center text-xs text-muted-foreground">
+                  <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed text-xs text-muted-foreground">
                     Drop here
                   </div>
                 )}
