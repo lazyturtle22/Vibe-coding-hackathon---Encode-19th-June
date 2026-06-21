@@ -1,5 +1,19 @@
 # ForgeCRM — Changelog
 
+## [Phase 8 · UX] Hover-slide sidebar + bigger logo + higher-contrast tabs (8.1)
+
+**Commit scope:** `components/app-shell.tsx`, `TASKS.md`.
+
+- Sidebar is now a thin **icon rail** (`w-20`) that **slides open on hover** to `w-64`, overlaying
+  the content (no reflow) — neater. Logo enlarged (size-12 → 14); tabs brighter and larger
+  (`text-slate-300`, `size-[22px]` icons, `font-medium`), active tab in cyan. Main content offset
+  `md:ml-20`. Mobile bottom-bar unchanged.
+- Kicks off **Phase 8** (see `TASKS.md`): deeper AI for acquisition + management, data protection,
+  real-AI key. Work is on branch `phase8-ai-ux` to keep `main` (the live demo) stable.
+- **Revert effect:** restores the always-open `w-60` sidebar.
+
+
+
 ## [PIVOT] Property-management reframe — kickoff (branch `property-pivot`)
 
 ForgeCRM repositions from a usage-based-billing B2B CRM to its real product (per the pitch deck):
