@@ -26,8 +26,8 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pricing", label: "Pricing Engine", icon: Zap, hero: true },
-  { href: "/copilot", label: "Quote Copilot", icon: Bot, hero: true },
+  { href: "/pricing", label: "Pricing Engine", icon: Zap },
+  { href: "/copilot", label: "Quote Copilot", icon: Bot },
   { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
   { href: "/accounts", label: "Accounts", icon: Building2 },
   { href: "/contacts", label: "Contacts", icon: Users },
@@ -95,11 +95,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 >
                   <Icon className={cn("size-[18px]", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
                   {item.label}
-                  {"hero" in item && item.hero && (
-                    <span className="ml-auto rounded bg-indigo-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-300">
-                      hero
-                    </span>
-                  )}
                 </Link>
               );
             })}
