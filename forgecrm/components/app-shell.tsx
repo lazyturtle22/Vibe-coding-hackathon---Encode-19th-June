@@ -22,6 +22,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { GlobalSearch } from "@/components/global-search";
 import { useStore } from "@/lib/store";
+import { usePropertyStore } from "@/lib/property-store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -52,7 +53,10 @@ function useHydratedStore() {
     let mounted = true;
     const finish = () => mounted && setHydrated(true);
     const unsub = useStore.persist.onFinishHydration(finish);
-    Promise.resolve(useStore.persist.rehydrate()).then(finish);
+    Promise.all([
+      Promise.resolve(useStore.persist.rehydrate()),
+      Promise.resolve(usePropertyStore.persist.rehydrate()),
+    ]).then(finish);
     return () => {
       mounted = false;
       unsub();

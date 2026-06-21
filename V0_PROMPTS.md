@@ -22,7 +22,38 @@ ready-to-paste prompts for [v0.dev](https://v0.dev) — one per screen. Workflow
 
 _Prompts will be appended here when their backend (Claude) is ready — see `TASKS.md` phases 2–6._
 
-<!-- P2 Payments dashboard — TODO -->
+### P2 — Payments / rent dashboard (REQ #3)  ✅ backend ready
+
+> Prepend the shared context block above, then:
+
+```
+Build a "Payments" dashboard page for a landlord CRM. It tracks rent, deposits and bills
+across a small property portfolio.
+
+Top: four summary stat cards — "Outstanding" (£, red), "Late" (count + £, red), "Pending"
+(count + £, amber), "Collected" (£, green).
+
+Below: a payments table with columns — Status pill (Late = red, Pending = amber, Paid =
+green), Property, Tenant, Type (Rent/Deposit/Bill), Label, Amount (£, right-aligned),
+Due date, and an action. Late rows are tinted red and show "N days overdue". Each unpaid
+row has a "Mark paid" button; each LATE rent row also has a "Send reminder" button.
+Sort: late first (most overdue at top), then pending, then paid.
+
+Above the table, a toolbar: a filter segmented control (All / Late / Pending / Paid) and a
+property filter dropdown, plus a prominent "Send late-rent reminders" button that, when the
+count > 0, shows how many reminders it will send.
+
+Props (no data fetching — everything passed in):
+- summary: { outstanding, lateAmount, lateCount, pendingAmount, pendingCount, collected }
+- rows: Array<{ id, status: 'late'|'pending'|'paid', propertyLabel, tenantName,
+  type: 'rent'|'deposit'|'bill', label, amount, dueDate, overdueDays }>
+- onMarkPaid(id), onSendReminder(id), onSendAllReminders(), filter state callbacks
+Use £ formatting (e.g. £1,100) and DD Mon dates. Dense, professional, light theme.
+```
+
+**Wiring (Claude):** props come from `usePropertyData()` + `lib/payments` (`summarize`,
+`viewPayments`); `onMarkPaid`→`markPaymentPaid`, `onSendAllReminders`→`generateLateReminders`,
+`onSendReminder`→`scheduleNotice`/`sendNotice`. Map `tenancyId`→property via `tenancies`.
 <!-- P3 Maintenance flow — TODO -->
 <!-- P4 Notice board — TODO -->
 <!-- P5 Social aggregator — TODO -->

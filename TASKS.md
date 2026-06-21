@@ -26,7 +26,7 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 | 0.1 | Create this task table + `V0_PROMPTS.md` + CHANGELOG pivot entry | Claude | ✅ | committed on `property-pivot` |
 | 0.2 | **Property domain data model** `types/property.ts` | Claude | ✅ | Landlord, Property, Tenant, Tenancy, Payment, MaintenanceRequest+Triage, Notice, SocialPost, ChatLog, QAEntry + label maps. tsc clean. |
 | 0.3 | **Seed data** `data/property-seed.ts` (additive) | Claude | ✅ | landlord + 6 properties, 5 tenants, 4 tenancies; 8 payments (3 late: Oakfield/Millbrook/Elm + pending + paid); 3 maintenance (boiler escalated); 3 notices (auto + scheduled); 6 social posts; 2 chat logs + 4 QA. `TODAY=2026-06-21`. tsc clean. |
-| 0.4 | **Store + repository** extend for property entities + actions | Claude | ⬜ | addPayment/markPaid, addMaintenance/triage, scheduleNotice/send, saveLead/contact, addQA. Keep `resetToSeed`. |
+| 0.4 | **Store** `lib/property-store.ts` (separate, additive) + `use-property-data.ts` + AppShell hydration | Claude | ✅ | all property entities + actions (markPaid, generateLateReminders, scheduleNotice/send/sendDue, addMaintenance/setTriage/photo/resolve, setLeadStatus, addChatLog/addQAEntries). AppShell now rehydrates both stores. tsc clean. |
 | 0.5 | Reframe shell + brand: tagline → "AI-native CRM for private accommodation landlords"; nav reflects property modules | Claude | ⬜ | depends on which pages survive (Phase 1) |
 | 0.6 | Dashboard → property KPIs | Claude+🅥 | ⬜ | properties, occupancy %, rent collected vs due, overdue count, open maintenance, scheduled notices |
 
@@ -42,9 +42,9 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 2 — REQ #3: Rent / deposit / bill tracker  ⭐ (Client Management)
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 2.1 | Payment ledger logic `lib/payments.ts` — pending/paid/late vs `TODAY`, per tenancy, rent schedule (monthly due-day), deposit + bills | Claude | ⬜ | deterministic; reuse `lib/format`. "late" = unpaid & dueDate < today |
-| 2.2 | **Auto late-notice** generation when a payment is late → creates a tenant Notice (ties to Phase 4) | Claude | ⬜ | logic only; firing = scheduler in P4 |
-| 2.3 | Payments dashboard UI: by-status table, per-property, late highlighted, "mark paid", "send reminder" | 🅥 v0 | ⬜ | v0 prompt in V0_PROMPTS.md; Claude wires to store |
+| 2.1 | Payment ledger logic `lib/payments.ts` — pending/paid/late vs `TODAY`, summary, sorted views | Claude | ✅ | `paymentStatus`/`isLate`/`daysLate`/`summarize`/`viewPayments`/`lateReminderBody`. Verified via `scripts/rent-check.mts`: 3 late £3,850, 2 pending £236, collected £2,050. |
+| 2.2 | **Auto late-notice** `generateLateReminders()` in store → creates sent tenant Notice per late rent | Claude | ✅ | uses `lateReminderBody`; skips if one already exists |
+| 2.3 | Payments dashboard UI: by-status table, per-property, late highlighted, "mark paid", "send reminder" | 🅥 v0 | ⬜ | **v0 prompt ready in V0_PROMPTS.md.** Claude to build functional page next + wire to store; v0 enhances |
 
 ## Phase 3 — REQ #4: Property support / maintenance  ⭐ (Client Management)
 | ID | Task | Owner | Status | Notes |
