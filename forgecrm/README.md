@@ -7,7 +7,7 @@ offload the work to an agency). ForgeCRM covers the whole journey — **find ten
 manage the tenancy** — with AI doing the tedious parts and a deterministic core keeping the money
 honest.
 
-> **▶ Live demo:** _add your Vercel URL here after deploying_ — see [`../DEPLOY.md`](../DEPLOY.md).
+> **▶ Live demo:** **https://vibe-coding-hackathon-encode-19th-june-potom.vercel.app** — see [`../DEPLOY.md`](../DEPLOY.md).
 
 ## What it does (the five jobs)
 
