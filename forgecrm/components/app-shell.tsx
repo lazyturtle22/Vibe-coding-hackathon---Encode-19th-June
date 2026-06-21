@@ -10,6 +10,7 @@ import {
   Wallet,
   Wrench,
   Bell,
+  BrainCircuit,
   ShieldCheck,
   RotateCcw,
 } from "lucide-react";
@@ -28,6 +29,7 @@ const NAV = [
   { href: "/payments", label: "Payments", icon: Wallet },
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/notices", label: "Notice board", icon: Bell },
+  { href: "/insights", label: "Insights", icon: BrainCircuit },
   { href: "/privacy", label: "Data & privacy", icon: ShieldCheck },
 ] as const;
 

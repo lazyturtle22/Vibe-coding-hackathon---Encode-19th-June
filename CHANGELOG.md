@@ -1,5 +1,20 @@
 # ForgeCRM — Changelog
 
+## [Phase 8 · AI] Management AI — behavioural insights + cohorts (8.4)
+
+**Commit scope:** `lib/insights.ts` (new), `app/api/insights/route.ts` (new), `app/insights/page.tsx`
+(new), `components/app-shell.tsx`.
+
+- Learns each tenant's behaviour **over time** (rent on-time rate + late history, maintenance load,
+  renewal proximity) into a deterministic signal + risk level, and groups tenants with **similar
+  traits** into cohorts (flight-risk, repeat-late, renewal-due, reliable).
+- `/api/insights` (Claude tool-use, names reduced to first names before the call) summarises the
+  signals into a headline, patterns, and **per-tenant suggested actions**; deterministic fallback.
+- New **Insights** page + nav. Verified: flags the 2 flight-risk tenants with retention actions.
+- **Revert effect:** removes the insights page, route, lib, and nav item.
+
+
+
 ## [Phase 8 · data protection] PII redaction + Data & privacy page (8.5)
 
 **Commit scope:** `lib/redact.ts` (new), `app/api/qa/route.ts`, `app/api/maintenance/route.ts`,
