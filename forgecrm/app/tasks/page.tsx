@@ -95,16 +95,21 @@ export default function TasksPage() {
                 />
                 <div className="min-w-0 flex-1">
                   <div className={cn("text-sm font-medium transition-colors", showDone && "text-muted-foreground line-through")}>{t.title}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
                     {acc && (
                       <Link href={`/accounts/${t.accountId}`} className="hover:text-indigo-600 hover:underline">
                         {acc}
                       </Link>
                     )}
+                    {/* Date shown under title on mobile to avoid overflow */}
+                    <span className={cn("sm:hidden tabular-nums", overdue ? "font-medium text-rose-600" : "")}>
+                      {overdue ? "overdue · " : ""}
+                      {new Date(t.dueAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                    </span>
                   </div>
                 </div>
-                <Badge variant="secondary" className="font-normal">{TYPE_LABEL[t.type]}</Badge>
-                <span className={cn("w-24 text-right text-xs tabular-nums", overdue ? "font-medium text-rose-600" : "text-muted-foreground")}>
+                <Badge variant="secondary" className="hidden font-normal sm:inline-flex">{TYPE_LABEL[t.type]}</Badge>
+                <span className={cn("hidden w-24 text-right text-xs tabular-nums sm:block", overdue ? "font-medium text-rose-600" : "text-muted-foreground")}>
                   {overdue ? "overdue " : ""}
                   {new Date(t.dueAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                 </span>

@@ -86,3 +86,35 @@ runbook (deploy, env, GitHub description/topics, and the real-AI round-trip chec
 A visible **Reset to seed** restores pristine demo state. Single currency GBP, 30-day periods.
 
 See `../forgecrm-spec.md` for the full architecture, DSL, and engine spec.
+
+---
+
+## Mobile responsiveness
+
+All screens are fully responsive and tested at 375 px (iPhone SE) and above.
+Changes made in the `feature/mobile-responsive` branch:
+
+### Navigation
+- **Mobile bottom nav bar** (`components/app-shell.tsx`) — a fixed tab bar appears on screens below `md` (768 px) with five primary destinations: Home, Pricing, Copilot, Pipeline, Accounts. The sidebar remains unchanged on desktop.
+- **Main content padding** reduced from `px-6 py-6` to `px-4 py-4` on mobile with extra bottom padding (`pb-24`) so content clears the bottom nav bar.
+
+### Pipeline board (`app/pipeline/page.tsx`)
+- Desktop: unchanged kanban with drag-and-drop.
+- Mobile: switches to a vertical grouped list (one section per stage). Each deal card gains a native `<select>` to move the deal to a different stage — drag-and-drop doesn't work on touch so this is the mobile affordance.
+
+### Accounts list (`app/accounts/page.tsx`)
+- Desktop: unchanged 12-column grid table (Account / Plan / MRR / Usage / Health).
+- Mobile: collapses to a two-column layout — account name/industry/tags on the left, MRR + health badge on the right. Plan and usage shift to a single sub-text line under the account name.
+
+### Pricing engine (`app/pricing/page.tsx`)
+- Affected-accounts rows and grandfathered-accounts rows now `flex-wrap` so the before → after → delta numbers wrap to a second line instead of overflowing the viewport.
+
+### Customer 360 (`app/accounts/[id]/page.tsx`)
+- Tab list wrapped in an `overflow-x-auto` container so it scrolls horizontally if the four tabs are too wide for the screen.
+- Overview and Billing two-column grids switched from `md:grid-cols-2` (768 px) to `sm:grid-cols-2` (640 px) so they use the space earlier.
+
+### Tasks (`app/tasks/page.tsx`)
+- Type badge and date moved below the task title on mobile (`sm:hidden` / `sm:block`). The date appears as a sub-line under the account name on small screens to avoid overflow.
+
+### Copilot & Support (`app/copilot/page.tsx`, `app/support/page.tsx`)
+- Two-column grids changed from `lg:grid-cols-2` (1024 px) to `md:grid-cols-2` (768 px) so they stack properly on phones and small tablets.

@@ -37,6 +37,15 @@ const NAV = [
   { href: "/marketing", label: "Marketing", icon: Megaphone },
 ] as const;
 
+// Five most-used items shown in the mobile bottom bar
+const MOBILE_NAV = [
+  { href: "/", label: "Home", icon: LayoutDashboard },
+  { href: "/pricing", label: "Pricing", icon: Zap },
+  { href: "/copilot", label: "Copilot", icon: Bot },
+  { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
+  { href: "/accounts", label: "Accounts", icon: Building2 },
+] as const;
+
 function useHydratedStore() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
@@ -123,11 +132,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Button>
             </div>
           </header>
-          <main className="min-w-0 flex-1 px-6 py-6">
+          <main className="min-w-0 flex-1 px-4 py-4 pb-24 sm:px-6 sm:py-6 sm:pb-6">
             {hydrated ? children : <ShellSkeleton />}
           </main>
         </div>
       </div>
+
+      {/* Mobile bottom nav — hidden on md+ where the sidebar takes over */}
+      <nav className="fixed bottom-0 left-0 right-0 z-30 flex border-t bg-background/95 backdrop-blur md:hidden">
+        {MOBILE_NAV.map((item) => {
+          const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
+                active ? "text-indigo-600" : "text-muted-foreground",
+              )}
+            >
+              <Icon className={cn("size-5", active ? "text-indigo-600" : "text-muted-foreground")} />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
       <Toaster richColors position="top-right" />
     </TooltipProvider>
   );

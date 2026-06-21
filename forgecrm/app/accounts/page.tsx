@@ -59,7 +59,8 @@ export default function AccountsPage() {
       </div>
 
       <Card className="gap-0 overflow-hidden p-0">
-        <div className="grid grid-cols-12 gap-2 border-b bg-muted/40 px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {/* Desktop header row — hidden on mobile */}
+        <div className="hidden grid-cols-12 gap-2 border-b bg-muted/40 px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground sm:grid">
           <div className="col-span-4">Account</div>
           <div className="col-span-2">Plan</div>
           <div className="col-span-2 text-right">MRR</div>
@@ -68,16 +69,32 @@ export default function AccountsPage() {
         </div>
         <div className="divide-y">
           {accounts.map((a) => (
-            <Link key={a.id} href={`/accounts/${a.id}`} className="grid grid-cols-12 items-center gap-2 px-4 py-3 hover:bg-muted/40">
-              <div className="col-span-4">
-                <div className="text-sm font-medium">{a.name}</div>
-                <div className="text-xs text-muted-foreground">{a.industry} · {a.ownerName}</div>
-                <div className="mt-1"><TagChips tags={getTagsForAccount(data, a)} /></div>
+            <Link key={a.id} href={`/accounts/${a.id}`} className="block px-4 py-3 hover:bg-muted/40 sm:grid sm:grid-cols-12 sm:items-center sm:gap-2">
+              {/* Mobile: name + MRR + health in one row */}
+              <div className="flex items-start justify-between sm:contents">
+                <div className="col-span-4 min-w-0">
+                  <div className="text-sm font-medium">{a.name}</div>
+                  <div className="text-xs text-muted-foreground">{a.industry} · {a.ownerName}</div>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <TagChips tags={getTagsForAccount(data, a)} />
+                    {/* Plan + usage visible under name on mobile only */}
+                    <span className="text-xs text-muted-foreground sm:hidden">
+                      {getPlan(data, a.planId)?.name ?? "—"} · {formatUnits(a.monthlyUsageUnits)}
+                    </span>
+                  </div>
+                </div>
+                {/* MRR + health shown inline on mobile, in grid columns on desktop */}
+                <div className="flex shrink-0 flex-col items-end gap-1 sm:contents">
+                  <div className="col-span-2 hidden text-sm sm:block">{getPlan(data, a.planId)?.name ?? "—"}</div>
+                  <div className="col-span-2 text-right text-sm font-medium tabular-nums">
+                    {formatGBPWhole(getAccountMRR(data, a.id))}
+                  </div>
+                  <div className="col-span-2 hidden text-right text-sm tabular-nums text-muted-foreground sm:block">
+                    {formatUnits(a.monthlyUsageUnits)}
+                  </div>
+                  <div className="col-span-2 flex justify-end"><HealthBadge score={a.healthScore} /></div>
+                </div>
               </div>
-              <div className="col-span-2 text-sm">{getPlan(data, a.planId)?.name ?? "—"}</div>
-              <div className="col-span-2 text-right text-sm font-medium tabular-nums">{formatGBPWhole(getAccountMRR(data, a.id))}</div>
-              <div className="col-span-2 text-right text-sm tabular-nums text-muted-foreground">{formatUnits(a.monthlyUsageUnits)}</div>
-              <div className="col-span-2 flex justify-end"><HealthBadge score={a.healthScore} /></div>
             </Link>
           ))}
           {accounts.length === 0 && <div className="px-4 py-8 text-center text-sm text-muted-foreground">No matching accounts.</div>}

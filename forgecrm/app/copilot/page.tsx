@@ -110,7 +110,7 @@ export default function CopilotPage() {
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Conversation */}
         <Card className="flex max-h-[640px] flex-col gap-0 p-0">
           <div className="border-b px-4 py-3">

@@ -164,7 +164,7 @@ export default function Dashboard() {
               <div className="min-w-0 flex-1">
                 <span className="text-sm">{a.summary}</span>
               </div>
-              <span className="shrink-0 text-xs text-muted-foreground">{accountName(a.accountId)}</span>
+              <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">{accountName(a.accountId)}</span>
               <ArrowRight className="size-3 shrink-0 text-muted-foreground" />
             </Link>
           ))}
