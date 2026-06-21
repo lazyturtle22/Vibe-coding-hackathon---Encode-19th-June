@@ -49,9 +49,9 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 3 — REQ #4: Property support / maintenance  ⭐ (Client Management)
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 3.1 | Maintenance model + deterministic triage `lib/maintenance.ts` — category → ideal-solution template + **guided photo checklist** ("photograph X, Y") + escalate? + summary | Claude | ⬜ | reuse pattern from old `lib/triage.ts` |
-| 3.2 | AI route `app/api/maintenance/` (Claude tool-use): free-text issue → {category, solution steps, photosToRequest[], escalate, summary}; deterministic fallback | Claude | ⬜ | reuse the tool-use+Zod+fallback pattern; needs key, has fallback |
-| 3.3 | Maintenance UI: tenant submits issue → guided photo capture list → triage result → escalation w/ summary | 🅥 v0 | ⬜ | v0 prompt; Claude wires |
+| 3.1 | `lib/maintenance.ts` — deterministic triage (category detect, ideal steps, guided photo checklist, urgency, escalate+summary) + Zod schema | Claude | ✅ | category/urgency keyword rules + per-category templates |
+| 3.2 | AI route `app/api/maintenance/route.ts` (Claude tool-use + Zod + fallback to triageMaintenance) | Claude | ✅ | server logs failures; has key→fallback. Page calls it, falls back client-side too |
+| 3.3 | Maintenance page `app/maintenance/page.tsx` + nav | Claude→🅥 | 🔄 | **Functional DONE + verified live** (boiler escalated w/ summary, 3 steps, guided photos, mark-resolved, 0 errors). v0 prompt ready to elevate visuals |
 
 ## Phase 4 — REQ #5: Automated per-property notice board  ⭐ (Management)
 | ID | Task | Owner | Status | Notes |

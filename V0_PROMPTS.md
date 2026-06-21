@@ -54,7 +54,36 @@ Use £ formatting (e.g. £1,100) and DD Mon dates. Dense, professional, light th
 **Wiring (Claude):** props come from `usePropertyData()` + `lib/payments` (`summarize`,
 `viewPayments`); `onMarkPaid`→`markPaymentPaid`, `onSendAllReminders`→`generateLateReminders`,
 `onSendReminder`→`scheduleNotice`/`sendNotice`. Map `tenancyId`→property via `tenancies`.
-<!-- P3 Maintenance flow — TODO -->
+### P3 — Maintenance flow (REQ #4)  ✅ backend ready
+
+> Prepend the shared context block above, then:
+
+```
+Build a "Maintenance" page for a landlord CRM. Two columns.
+
+LEFT: (a) an intake card "Log a maintenance issue" — a property+tenant dropdown, a short
+title input, a description textarea, and a "Triage issue" button (shows a spinner while
+working). (b) Below it, a "Requests" list — each row: title, property · tenant, and a
+status pill (Open=grey, Triaged=blue, Escalated=red, Resolved=green). Clicking a row
+selects it.
+
+RIGHT: the selected request's triage detail card —
+- header: title, property · tenant, status pill
+- the tenant's description
+- two pills: category (e.g. Heating) and urgency (low/medium/high/emergency, colour-scaled)
+- IF escalated: a red "Escalated to you" banner with a one-line summary
+- "Suggested first response": a numbered list of safe steps
+- "Photos to submit": a checklist — each item is a thing to photograph with a "Submit"
+  button; once submitted it shows a green "submitted" tick and strikes through
+- a green "Mark resolved" button
+
+Props (no fetching): requests[], selectedId, and callbacks onSelect(id), onTriage(form),
+onSubmitPhoto(reqId, photoLabel), onResolve(reqId). Dense, professional, light theme.
+```
+
+**Wiring (Claude):** props from `usePropertyData()`; triage via `POST /api/maintenance`
+(fallback `lib/maintenance.triageMaintenance`); `onTriage`→`addMaintenance`+`setTriage`,
+`onSubmitPhoto`→`addMaintenancePhoto`, `onResolve`→`resolveMaintenance`.
 <!-- P4 Notice board — TODO -->
 <!-- P5 Social aggregator — TODO -->
 <!-- P6 Q&A agent — TODO -->

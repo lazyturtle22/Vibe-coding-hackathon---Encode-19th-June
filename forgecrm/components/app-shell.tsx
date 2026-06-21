@@ -15,6 +15,7 @@ import {
   Radar,
   Megaphone,
   Wallet,
+  Wrench,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -29,6 +30,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/payments", label: "Payments", icon: Wallet },
+  { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/pricing", label: "Pricing Engine", icon: Zap },
   { href: "/copilot", label: "Quote Copilot", icon: Bot },
   { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
