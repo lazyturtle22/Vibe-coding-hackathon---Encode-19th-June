@@ -7,9 +7,9 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ForgeCRM — pricing as a sentence",
+  title: "ForgeCRM — CRM for private accommodation landlords",
   description:
-    "A CRM whose hero feature is a natural-language pricing engine. Author billing logic in English; a deterministic engine shows the revenue impact across your whole book.",
+    "An AI-native CRM for individual residential landlords: find tenants, answer questions from past chats, track rent and bills, triage maintenance, and schedule tenant notices.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

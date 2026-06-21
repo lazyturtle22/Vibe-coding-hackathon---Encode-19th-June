@@ -30,14 +30,14 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 | 0.5 | Reframe shell + brand: tagline → "AI-native CRM for private accommodation landlords"; nav reflects property modules | Claude | ⬜ | depends on which pages survive (Phase 1) |
 | 0.6 | Dashboard → property KPIs | Claude+🅥 | ⬜ | properties, occupancy %, rent collected vs due, overdue count, open maintenance, scheduled notices |
 
-## Phase 1 — Remove the pricing/sales-finance surface  (Claude, 🧹)
-| ID | Task | Owner | Status | Notes |
-|----|------|-------|--------|-------|
-| 1.1 | Delete NL **pricing engine** page `app/pricing/` + nav entry | Claude 🧹 | ⬜ | the "don't vibe-code pricing" cut |
-| 1.2 | Remove pricing DSL + sim: `types/pricing.ts`, `lib/simulate.ts`, `lib/fallbacks.ts` rule pills, rule-compiler in `app/api/ai/route.ts` + `lib/ai.ts` `compileRule`/`materializeRule`, `lib/leakage.ts`, `components/rule-card.tsx` | Claude 🧹 | ⬜ | keep `lib/format.ts`; salvage `computeInvoice` idea for rent ledger or delete |
-| 1.3 | Remove/repurpose **quote-to-cash copilot** `app/copilot/` | Claude 🧹 | ⬜ | sales-finance; deprioritise. Could later become "Conversion" assistant — out of scope for v1 |
-| 1.4 | Retire engine smoke/hero harnesses tied to pricing (`scripts/`, `npm run smoke/hero`) | Claude 🧹 | ⬜ | replace with property-domain checks if time |
-| 1.5 | Strip pricing wording from README/DEPLOY | Claude 🧹 | ⬜ | |
+## Phase 1 — Remove the pricing/sales-finance surface  ✅ DONE (Claude, 🧹)
+Deleted ALL legacy: pages (pricing, copilot, pipeline, accounts, contacts, tasks, support, leads,
+marketing, api/ai); lib (ai, clock, engine, fallbacks, leakage, quote, repository, simulate, store,
+triage, use-data); components (badges, global-search, invoice-view, rule-card); types/index +
+types/pricing; data/seed; scripts engine-smoke + hero-loop; package.json verify/smoke/hero/check
+(added `npm run rent`). Rewrote `app/page.tsx` (property dashboard) + `components/app-shell.tsx`
+(6-item property nav, property-store reset/hydration, no global-search). **Clean `next build` exit 0**,
+all routes property-only, 0 errors. App is now purely property-domain.
 
 ## Phase 2 — REQ #3: Rent / deposit / bill tracker  ⭐ (Client Management)
 | ID | Task | Owner | Status | Notes |
@@ -75,10 +75,10 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 7 — Brand, polish, submission
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 7.1 | Property-domain dashboard + nav final pass | Claude+🅥 | ⬜ | |
-| 7.2 | README/DEPLOY rewrite for the property product; new screenshots | Claude | ⬜ | |
-| 7.3 | `npm run build` green; deploy to Vercel; URL in README | Claude+user | ⬜ | user owns the Vercel deploy |
-| 7.4 | Demo script for the 5 requirements | Claude | ⬜ | |
+| 7.1 | Property-domain dashboard + nav + tagline | Claude+🅥 | ✅ | KPIs (properties/occupancy/rent/overdue/maintenance/notices) + overdue/maintenance/portfolio lists; tagline "private accommodation landlords"; layout metadata updated |
+| 7.2 | README rewrite + 6 fresh property screenshots | Claude | ✅ | `docs/screenshots/*` regenerated; README reframed around the 5 jobs |
+| 7.3 | `npm run build` green; deploy to Vercel; URL in README | Claude+user | 🔄 | build green; **deploy = user** (own Vercel acct; root dir `forgecrm`) |
+| 7.4 | Demo script for the 5 requirements | Claude | ⬜ | optional — DEPLOY.md has deploy steps |
 
 ---
 

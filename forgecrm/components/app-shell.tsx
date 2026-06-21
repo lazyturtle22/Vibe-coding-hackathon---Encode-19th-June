@@ -5,56 +5,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Zap,
-  Bot,
-  KanbanSquare,
-  Building2,
-  Users,
-  CheckSquare,
-  LifeBuoy,
-  Radar,
-  Megaphone,
+  Compass,
+  MessagesSquare,
   Wallet,
   Wrench,
   Bell,
-  Compass,
-  MessagesSquare,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { GlobalSearch } from "@/components/global-search";
-import { useStore } from "@/lib/store";
 import { usePropertyStore } from "@/lib/property-store";
 import { cn } from "@/lib/utils";
 
+// Ordered by the deck's stages: Attraction → Conversion → Management.
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/discover", label: "Find tenants", icon: Compass },
+  { href: "/qa", label: "Knowledge", icon: MessagesSquare },
   { href: "/payments", label: "Payments", icon: Wallet },
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/notices", label: "Notice board", icon: Bell },
-  { href: "/discover", label: "Find tenants", icon: Compass },
-  { href: "/qa", label: "Knowledge", icon: MessagesSquare },
-  { href: "/pricing", label: "Pricing Engine", icon: Zap },
-  { href: "/copilot", label: "Quote Copilot", icon: Bot },
-  { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
-  { href: "/accounts", label: "Accounts", icon: Building2 },
-  { href: "/contacts", label: "Contacts", icon: Users },
-  { href: "/tasks", label: "Tasks", icon: CheckSquare },
-  { href: "/support", label: "Support", icon: LifeBuoy },
-  { href: "/leads", label: "Leads", icon: Radar },
-  { href: "/marketing", label: "Marketing", icon: Megaphone },
 ] as const;
 
-// Five most-used items shown in the mobile bottom bar
+// Mobile bottom bar — five most-used.
 const MOBILE_NAV = [
   { href: "/", label: "Home", icon: LayoutDashboard },
-  { href: "/pricing", label: "Pricing", icon: Zap },
-  { href: "/copilot", label: "Copilot", icon: Bot },
-  { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
-  { href: "/accounts", label: "Accounts", icon: Building2 },
+  { href: "/discover", label: "Find", icon: Compass },
+  { href: "/payments", label: "Payments", icon: Wallet },
+  { href: "/maintenance", label: "Repairs", icon: Wrench },
+  { href: "/qa", label: "Knowledge", icon: MessagesSquare },
 ] as const;
 
 function useHydratedStore() {
@@ -62,14 +43,9 @@ function useHydratedStore() {
   useEffect(() => {
     let mounted = true;
     const finish = () => mounted && setHydrated(true);
-    const unsub = useStore.persist.onFinishHydration(finish);
-    Promise.all([
-      Promise.resolve(useStore.persist.rehydrate()),
-      Promise.resolve(usePropertyStore.persist.rehydrate()),
-    ]).then(finish);
+    Promise.resolve(usePropertyStore.persist.rehydrate()).then(finish);
     return () => {
       mounted = false;
-      unsub();
     };
   }, []);
   return hydrated;
@@ -77,14 +53,12 @@ function useHydratedStore() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const hydrated = useHydratedStore();
-  const resetToSeed = useStore((s) => s.resetToSeed);
+  const resetToSeed = usePropertyStore((s) => s.resetToSeed);
   const pathname = usePathname();
 
   function onReset() {
     resetToSeed();
-    toast.success("Demo data reset to seed", {
-      description: "Applied rules, quotes, and stage changes cleared.",
-    });
+    toast.success("Demo data reset", { description: "Properties, payments, and messages restored." });
   }
 
   return (
@@ -94,11 +68,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
           <div className="flex items-center gap-3 px-5 py-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/brand/forge-crm-icon.svg"
-              alt="ForgeCRM"
-              className="size-12 rounded-xl shadow-sm ring-1 ring-white/10"
-            />
+            <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-12 rounded-xl shadow-sm ring-1 ring-white/10" />
             <div className="text-2xl font-semibold tracking-tight text-white">ForgeCRM</div>
           </div>
           <nav className="flex flex-1 flex-col justify-evenly overflow-y-auto px-3 py-3">
@@ -111,9 +81,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={cn(
                     "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] transition-colors",
-                    active
-                      ? "bg-indigo-500/15 font-medium text-white"
-                      : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
+                    active ? "bg-indigo-500/15 font-medium text-white" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
                   )}
                 >
                   <Icon className={cn("size-[18px]", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
@@ -122,9 +90,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-          <div className="px-5 py-4 text-[11px] text-slate-500">
-            Solvimon track · GBP · 30-day periods
-          </div>
+          <div className="px-5 py-4 text-[11px] text-slate-500">For private accommodation landlords · GBP</div>
         </aside>
 
         {/* Main */}
@@ -135,11 +101,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-6 rounded-md" />
               <span className="font-semibold">ForgeCRM</span>
             </div>
-            <GlobalSearch />
             <div className="ml-auto flex items-center gap-3">
-              <span className="hidden text-xs text-muted-foreground sm:inline">
-                In-memory demo data
-              </span>
+              <span className="hidden text-xs text-muted-foreground sm:inline">In-memory demo data</span>
               <Button variant="outline" size="sm" onClick={onReset} className="gap-2">
                 <RotateCcw className="size-3.5" />
                 Reset to seed
@@ -152,7 +115,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* Mobile bottom nav — hidden on md+ where the sidebar takes over */}
+      {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 flex border-t bg-background/95 backdrop-blur md:hidden">
         {MOBILE_NAV.map((item) => {
           const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -161,10 +124,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link
               key={item.href}
               href={item.href}
-              className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
-                active ? "text-indigo-600" : "text-muted-foreground",
-              )}
+              className={cn("flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors", active ? "text-indigo-600" : "text-muted-foreground")}
             >
               <Icon className={cn("size-5", active ? "text-indigo-600" : "text-muted-foreground")} />
               {item.label}

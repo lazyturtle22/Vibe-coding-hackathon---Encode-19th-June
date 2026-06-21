@@ -7,10 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verify": "tsx ../.claude/skills/engine-verify/scripts/verify.mts",
-    "smoke": "tsx scripts/engine-smoke.mts",
-    "hero": "tsx scripts/hero-loop.mts",
-    "check": "npm run verify && npm run smoke && npm run hero"
+    "rent": "tsx scripts/rent-check.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
