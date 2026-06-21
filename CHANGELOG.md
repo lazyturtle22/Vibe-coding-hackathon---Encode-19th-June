@@ -7,6 +7,37 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [round-2 critique] Dependency cleanup, copilot deal selector, nav polish
+
+Addresses the second review critique. Code items done; account/credit items remain for the user.
+
+- **#9 — remove "hero" sidebar labels** (`components/app-shell.tsx`): dropped the `hero` flags
+  and the "HERO" chip on Pricing Engine / Quote Copilot.
+- **#8 — remove `next-themes`** (`components/ui/sonner.tsx`, `package.json`): the app is
+  light-only with no theme toggle; the toaster now hard-codes `theme="light"` and the dep is
+  removed.
+- **#7 — resolve `@base-ui/react` vs `shadcn`** (`app/globals.css`, `package.json`): they aren't
+  two competing UI kits — `@base-ui/react` is the primitive layer 12 `components/ui/*` build on,
+  while `shadcn` is just the CLI + a **dead** `@import "shadcn/tailwind.css"` (the file doesn't
+  even exist). Removed the dead import and the `shadcn` runtime dep (kept base-ui). `npm install`
+  pruned **257** transitive packages. `npx shadcn add` still works without the dep.
+- **#6 — copilot deal selector** (`app/copilot/page.tsx`): a dropdown of open deals
+  (proposal/negotiation). The Lumen deal keeps its seeded transcript + real quote builder (hero
+  path untouched); other deals show deal context and get a deterministic, engine-derived quote at
+  the account's run-rate. Verified: Harbor Freight → ARR £63,000 / 54% margin.
+- **#5 — @dnd-kit/core: ATTEMPTED, REVERTED (kept native HTML5 DnD).** Installed `@dnd-kit/core`
+  and rewrote the board, but **v6.3.1 is incompatible with this project's React 19** —
+  `useDraggable`/`useDroppable` silently no-op (verified: the DOM gets none of the expected
+  `role`/`aria-roledescription`/`tabindex` attributes, and neither mouse nor keyboard activation
+  fires `onDragStart`). Adopting it would break dragging, so the working native HTML5 DnD is
+  retained. Revisit only with a React-19-compatible drag library. **No code change net for #5.**
+- **#10 — fresh `npm install` verified**: clean copy of the manifests installs with exit 0, no
+  errors (2 non-blocking moderate audit advisories).
+- **#1/#3/#4 (deploy, key, GitHub topics)** remain user actions — see `DEPLOY.md`. **#2** (README
+  screenshots) was already delivered in the submission-prep round.
+- **Revert effect:** restores the hero labels, `next-themes`, the `shadcn` dep + dead import, and
+  the single-deal copilot.
+
 ## [docs · submission] Deploy/submission prep — screenshots, README, DEPLOY.md, env template
 
 **Commit scope:** `DEPLOY.md` (new, repo root), `forgecrm/README.md`,
