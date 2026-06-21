@@ -44,7 +44,7 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 |----|------|-------|--------|-------|
 | 2.1 | Payment ledger logic `lib/payments.ts` — pending/paid/late vs `TODAY`, summary, sorted views | Claude | ✅ | `paymentStatus`/`isLate`/`daysLate`/`summarize`/`viewPayments`/`lateReminderBody`. Verified via `scripts/rent-check.mts`: 3 late £3,850, 2 pending £236, collected £2,050. |
 | 2.2 | **Auto late-notice** `generateLateReminders()` in store → creates sent tenant Notice per late rent | Claude | ✅ | uses `lateReminderBody`; skips if one already exists |
-| 2.3 | Payments dashboard UI: by-status table, per-property, late highlighted, "mark paid", "send reminder" | 🅥 v0 | ⬜ | **v0 prompt ready in V0_PROMPTS.md.** Claude to build functional page next + wire to store; v0 enhances |
+| 2.3 | Payments dashboard `app/payments/page.tsx` + nav | Claude→🅥 | 🔄 | **Functional page DONE + wired + verified live** (Outstanding £4,086, 3 late sorted, mark-paid/remind/send-all work, 0 errors). v0 prompt ready in V0_PROMPTS.md to elevate the visual design — swap in when generated. |
 
 ## Phase 3 — REQ #4: Property support / maintenance  ⭐ (Client Management)
 | ID | Task | Owner | Status | Notes |
