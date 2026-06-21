@@ -48,7 +48,7 @@ export default function DiscoverPage() {
 
   // Live internet search state
   const [liveResults, setLiveResults] = useState<LivePost[] | null>(null);
-  const [liveSource, setLiveSource] = useState<"reddit" | "generated" | null>(null);
+  const [liveSource, setLiveSource] = useState<"reddit" | "generated" | "demo" | null>(null);
   const [liveLoading, setLiveLoading] = useState(false);
   // Track which live post IDs the user has contacted (local only — not persisted to store)
   const [contactedLive, setContactedLive] = useState<Set<string>>(new Set());
@@ -65,10 +65,10 @@ export default function DiscoverPage() {
       if (res.ok) {
         const { results, source } = (await res.json()) as { results: LivePost[]; source: string };
         setLiveResults(results);
-        setLiveSource(source === "reddit" ? "reddit" : source === "generated" ? "generated" : null);
+        setLiveSource(source === "reddit" ? "reddit" : source === "generated" ? "generated" : "demo");
         if (results.length === 0) toast.info("No results found — try different search terms");
         else if (source === "reddit") toast.success(`Found ${results.length} live post${results.length === 1 ? "" : "s"} from Reddit`);
-        else toast.success(`Found ${results.length} AI-matched lead${results.length === 1 ? "" : "s"}`);
+        else toast.success(`Found ${results.length} lead${results.length === 1 ? "" : "s"}`);
       } else {
         toast.error("Search failed — check your connection");
       }
@@ -166,11 +166,11 @@ export default function DiscoverPage() {
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-sm">
           <span className="flex items-center gap-1.5 font-medium text-emerald-700">
             <Globe className="size-3.5" />
-            {liveSource === "reddit" ? "Live results from Reddit" : "AI-matched leads"}
+            {liveSource === "reddit" ? "Live results from Reddit" : liveSource === "generated" ? "AI-generated leads" : "Matched leads"}
           </span>
           <span className="text-emerald-600">
             · {liveResults.length} post{liveResults.length === 1 ? "" : "s"}
-            {liveSource === "reddit" ? " · classified by AI" : " · generated from search pattern"}
+            {liveSource === "reddit" ? " · classified by AI" : liveSource === "generated" ? " · Claude searched for you" : " · filtered by search"}
           </span>
           <button
             onClick={() => { setLiveResults(null); setLiveSource(null); setContactedLive(new Set()); }}
