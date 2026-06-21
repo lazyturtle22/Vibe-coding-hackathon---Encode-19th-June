@@ -105,12 +105,12 @@ export default function Dashboard() {
                 <YAxis tickFormatter={(v) => formatGBPCompact(Number(v))} tickLine={false} axisLine={false} fontSize={11} width={48} />
                 <RTooltip
                   formatter={(v) => [formatGBPWhole(Number(v)), "Value"]}
-                  cursor={{ fill: "rgba(99,102,241,0.06)" }}
+                  cursor={{ fill: "rgba(16,42,82,0.06)" }}
                   contentStyle={{ borderRadius: 8, fontSize: 12, border: "1px solid #e2e8f0" }}
                 />
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                   {pipelineByStage.map((_, i) => (
-                    <Cell key={i} fill="#6366f1" fillOpacity={0.55 + i * 0.12} />
+                    <Cell key={i} fill="#102a52" fillOpacity={0.45 + i * 0.16} />
                   ))}
                 </Bar>
               </BarChart>

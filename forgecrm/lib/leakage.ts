@@ -34,8 +34,12 @@ export interface LeakageRow {
 }
 
 /**
- * Find every undercharged account. Callable with no args (defaults to seed) so the
- * engine-verify harness can sum the leak straight from the data.
+ * Find every undercharged account.
+ *
+ * The seed defaults exist ONLY so the engine-verify harness can call `findLeakage()`
+ * with no args and sum the leak straight from the data. Application code must pass the
+ * live store data (the UI does, via repository.getLeakageRows) — never rely on the
+ * seed defaults at runtime, or the figure will silently ignore applied rules (bug #6).
  */
 export function findLeakage(
   accounts: Account[] = seedAccounts,
@@ -89,7 +93,10 @@ export function findLeakage(
   return rows;
 }
 
-/** Total monthly recoverable across the book. */
-export function totalRecoverable(rows: LeakageRow[] = findLeakage()): number {
+/**
+ * Total monthly recoverable across the book. `rows` is REQUIRED — pass the result of
+ * findLeakage(liveData) so this can never silently sum the seed baseline (bug #6).
+ */
+export function totalRecoverable(rows: LeakageRow[]): number {
   return roundPence(rows.reduce((sum, r) => sum + r.leak, 0));
 }

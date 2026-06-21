@@ -56,5 +56,5 @@ export function formatPctDelta(pct: number): string {
 /** A signed GBP delta, e.g. "+£37,950" / "-£1,400". */
 export function formatGBPDelta(amount: number): string {
   const sign = amount > 0 ? "+" : amount < 0 ? "-" : "";
-  return `${sign}${formatGBP(Math.abs(amount)).replace("£", "£")}`;
+  return `${sign}${formatGBP(Math.abs(amount))}`;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Bot, Loader2, Send, CheckCircle2, ArrowRight } from "lucide-react";
@@ -15,38 +15,50 @@ import { buildQuote, type AISource } from "@/lib/ai";
 import { projectQuote, RAMP_MONTHS, type QuoteProjection } from "@/lib/quote";
 import { formatGBP, formatGBPWhole, formatUnits } from "@/lib/format";
 import { copilotThread } from "@/data/seed";
-import type { AIQuote } from "@/types";
+import { DEAL_STAGE_LABELS, type Account, type AIQuote, type PricingPlan, type RuleEffect } from "@/types";
 
 export default function CopilotPage() {
   const data = useData();
-  const account = data.accounts.find((a) => a.id === copilotThread.accountId);
-  const deal = data.deals.find((d) => d.id === copilotThread.dealId);
+  // Deals a copilot would actively work — pick any to build a quote for it.
+  const openDeals = data.deals.filter((d) => d.stage === "proposal" || d.stage === "negotiation");
+  const [dealId, setDealId] = useState(copilotThread.dealId);
+  const deal = data.deals.find((d) => d.id === dealId);
+  const account = deal ? data.accounts.find((a) => a.id === deal.accountId) : undefined;
+  // The Lumen deal ships a rich seeded conversation → use the real quote builder.
+  const isHeroThread = dealId === copilotThread.dealId;
 
   const [building, setBuilding] = useState(false);
   const [quote, setQuote] = useState<AIQuote | null>(null);
   const [source, setSource] = useState<AISource>("fallback");
   const [sent, setSent] = useState(false);
 
-  const plan = useMemo(
-    () => (quote ? data.plans.find((p) => p.name === quote.planName) : undefined),
-    [quote, data.plans],
-  );
-  const projection: QuoteProjection | null = useMemo(
-    () => (quote && plan ? projectQuote(plan, quote.effects, quote.projectedMonthlyUsageUnits) : null),
-    [quote, plan],
-  );
+  const plan = quote ? data.plans.find((p) => p.name === quote.planName) : undefined;
+  const projection: QuoteProjection | null =
+    quote && plan ? projectQuote(plan, quote.effects, quote.projectedMonthlyUsageUnits) : null;
+
+  function selectDeal(id: string) {
+    setDealId(id);
+    setQuote(null);
+    setSent(false);
+  }
 
   async function build() {
     if (!account) return;
     setBuilding(true);
     setSent(false);
-    const { quote: q, source: src } = await buildQuote({
-      thread: copilotThread.messages.map((m) => ({ role: m.role, name: m.name, text: m.text })),
-      accountUsage: account.monthlyUsageUnits,
-      plans: data.plans,
-    });
-    setQuote(q);
-    setSource(src);
+    if (isHeroThread) {
+      const { quote: q, source: src } = await buildQuote({
+        thread: copilotThread.messages.map((m) => ({ role: m.role, name: m.name, text: m.text })),
+        accountUsage: account.monthlyUsageUnits,
+        plans: data.plans,
+      });
+      setQuote(q);
+      setSource(src);
+    } else {
+      // No seeded thread for this deal → build an engine-derived quote at the account's run-rate.
+      setQuote(localQuote(account, data.plans));
+      setSource("fallback");
+    }
     setBuilding(false);
   }
 
@@ -69,7 +81,7 @@ export default function CopilotPage() {
   }
 
   if (!account || !deal) {
-    return <div className="py-20 text-center text-muted-foreground">Copilot deal not found.</div>;
+    return <div className="py-20 text-center text-muted-foreground">No open deal selected.</div>;
   }
 
   return (
@@ -78,9 +90,23 @@ export default function CopilotPage() {
         title="Quote-to-cash copilot"
         subtitle="The copilot reads the conversation, extracts the projected usage, and assembles a hybrid quote — then Send provisions billing so the account immediately prices correctly."
         actions={
-          <Link href={`/accounts/${account.id}`} className="text-sm text-indigo-600 hover:underline">
-            {account.name} 360 →
-          </Link>
+          <div className="flex items-center gap-3">
+            <select
+              value={dealId}
+              onChange={(e) => selectDeal(e.target.value)}
+              className="h-9 max-w-[260px] truncate rounded-md border bg-background px-3 text-sm"
+              aria-label="Select a deal"
+            >
+              {openDeals.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.title}
+                </option>
+              ))}
+            </select>
+            <Link href={`/accounts/${account.id}`} className="whitespace-nowrap text-sm text-indigo-600 hover:underline">
+              360 →
+            </Link>
+          </div>
         }
       />
 
@@ -89,26 +115,43 @@ export default function CopilotPage() {
         <Card className="flex max-h-[640px] flex-col gap-0 p-0">
           <div className="border-b px-4 py-3">
             <div className="text-sm font-semibold">{deal.title}</div>
-            <div className="text-xs text-muted-foreground">Negotiation · {formatGBPWhole(deal.value)} ACV</div>
+            <div className="text-xs text-muted-foreground">
+              {DEAL_STAGE_LABELS[deal.stage]} · {formatGBPWhole(deal.value)} ACV
+            </div>
           </div>
           <div className="flex-1 space-y-3 overflow-y-auto p-4">
-            {copilotThread.messages.map((m, i) => {
-              const isRep = m.role === "rep";
-              return (
-                <div key={i} className={`flex ${isRep ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm ${
-                      isRep ? "bg-indigo-600 text-white" : "bg-muted text-foreground"
-                    }`}
-                  >
-                    <div className={`mb-0.5 text-[11px] font-medium ${isRep ? "text-indigo-100" : "text-muted-foreground"}`}>
-                      {m.name}
+            {isHeroThread ? (
+              copilotThread.messages.map((m, i) => {
+                const isRep = m.role === "rep";
+                return (
+                  <div key={i} className={`flex ${isRep ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm ${
+                        isRep ? "bg-indigo-600 text-white" : "bg-muted text-foreground"
+                      }`}
+                    >
+                      <div className={`mb-0.5 text-[11px] font-medium ${isRep ? "text-indigo-100" : "text-muted-foreground"}`}>
+                        {m.name}
+                      </div>
+                      {m.text}
                     </div>
-                    {m.text}
                   </div>
+                );
+              })
+            ) : (
+              <div className="space-y-2 text-sm">
+                <div className="rounded-2xl bg-muted px-3.5 py-2 text-foreground">
+                  <div className="mb-0.5 text-[11px] font-medium text-muted-foreground">Deal context</div>
+                  {account.name} · {account.industry} · ~{formatUnits(account.monthlyUsageUnits)} units/mo ·{" "}
+                  {formatGBPWhole(deal.value)} ACV
                 </div>
-              );
-            })}
+                <div className="rounded-2xl bg-muted px-3.5 py-2 text-muted-foreground">
+                  Open {DEAL_STAGE_LABELS[deal.stage].toLowerCase()} deal — no transcript on file. The copilot will
+                  propose a fitting plan and bespoke terms at this account&apos;s run-rate, with revenue and margin
+                  computed by the engine.
+                </div>
+              </div>
+            )}
           </div>
           <div className="border-t p-3">
             <Button onClick={build} disabled={building} className="w-full gap-2">
@@ -208,6 +251,27 @@ export default function CopilotPage() {
       </div>
     </div>
   );
+}
+
+/** Deterministic, engine-ready quote for a deal with no seeded transcript. */
+function localQuote(account: Account, plans: PricingPlan[]): AIQuote {
+  const usage = account.monthlyUsageUnits;
+  const sorted = [...plans].sort((a, b) => a.tier - b.tier);
+  const plan = sorted.find((p) => p.includedUnits >= usage) ?? sorted[sorted.length - 1];
+  const credit = Math.round(plan.basePrice / 2);
+  const effects: RuleEffect[] = [{ type: "credit_grant", credits: credit }];
+  if (usage > plan.includedUnits) {
+    effects.push({ type: "volume_discount", thresholdUnits: plan.includedUnits, discountPct: 10 });
+  }
+  const disc = usage > plan.includedUnits ? " and a 10% volume discount on overage" : "";
+  return {
+    planName: plan.name,
+    projectedMonthlyUsageUnits: usage,
+    effects,
+    rationale: `${plan.name} plan at this account's current run-rate (~${formatUnits(usage)} units/mo), with a ${formatGBP(
+      credit,
+    )}/mo ramp-up credit${disc}.`,
+  };
 }
 
 function Metric({ label, value, accent, good }: { label: string; value: string; accent?: boolean; good?: boolean }) {

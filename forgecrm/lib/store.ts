@@ -23,7 +23,8 @@ import type {
   Tag,
   Task,
 } from "@/types";
-import { ruleApplies } from "./engine";
+import { computeInvoice } from "./engine";
+import { demoNowISO, resetDemoClock } from "./clock";
 import * as seed from "@/data/seed";
 
 let _idCounter = 0;
@@ -118,6 +119,7 @@ export const useStore = create<StoreState>()(
 
       resetToSeed: () => {
         _idCounter = 0;
+        resetDemoClock(); // re-seeded demo is byte-identical to the first run
         set({ ...makeSeedState() });
       },
 
@@ -130,14 +132,19 @@ export const useStore = create<StoreState>()(
         })),
 
       applyRule: (rule) => {
-        const { accounts, subscriptions, plans } = get();
+        const { accounts, subscriptions, plans, rules } = get();
         const affected: string[] = [];
         for (const account of accounts) {
           const sub = subscriptions.find((su) => su.accountId === account.id);
           if (!sub) continue;
           const plan = plans.find((p) => p.id === sub.planId);
           if (!plan) continue;
-          if (ruleApplies(rule, account, plan, sub)) affected.push(account.id);
+          // Flag an account only when the rule actually moves its invoice total —
+          // matches the pricing page's simulateRule (delta!==0). Audience match alone
+          // (ruleApplies) over-reported rules that don't change the bill (bug #2).
+          const before = computeInvoice(account, sub, plan, rules).total;
+          const after = computeInvoice(account, sub, plan, [...rules, rule]).total;
+          if (after !== before) affected.push(account.id);
         }
         set((s) => ({ rules: [...s.rules, rule] }));
         // Append a rule_applied activity to each account whose bill actually changed.
@@ -191,7 +198,8 @@ export const useStore = create<StoreState>()(
           id: existing ? existing.id : newId("sub"),
           accountId: input.accountId,
           planId: input.planId,
-          startedAt: nowISO(),
+          // engine input → demo clock (deterministic), not the wall clock (bug #1)
+          startedAt: demoNowISO(),
           ruleOverrides: input.effects,
         };
         set((s) => ({

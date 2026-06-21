@@ -14,6 +14,7 @@ import {
   type PricingRule,
 } from "@/types";
 import { fallbackQuote, fallbackRule } from "./fallbacks";
+import { demoNowISO } from "./clock";
 
 export type AISource = "ai" | "fallback";
 
@@ -21,10 +22,18 @@ export type AISource = "ai" | "fallback";
 export function materializeRule(compiled: AICompiledRule): PricingRule {
   return {
     ...compiled,
-    id: `rule-${Date.now().toString(36)}-${Math.abs(hash(compiled.sourcePrompt)).toString(36)}`,
-    createdAt: new Date().toISOString(), // newest source → wins conflicts, beats legacy rules
+    id: `rule-${Math.abs(hash(compiled.sourcePrompt + idSeq())).toString(36)}`,
+    // engine input → demo clock: strictly increasing so "newest source wins" is
+    // deterministic and always beats the legacy seed rule (bug #1).
+    createdAt: demoNowISO(),
     active: true,
   };
+}
+
+let _ruleSeq = 0;
+function idSeq(): string {
+  _ruleSeq += 1;
+  return `:${_ruleSeq}`;
 }
 
 function hash(s: string): number {
@@ -33,19 +42,29 @@ function hash(s: string): number {
   return h;
 }
 
+// Slightly longer than the server's 8s SDK timeout so a healthy AI call is never cut
+// off, but a *hung* route can never spin the button forever — on abort we drop to the
+// keyed fallback like any other failure.
+const CLIENT_TIMEOUT_MS = 12_000;
+
 async function postAI(payload: unknown): Promise<{ result: unknown; source: AISource } | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CLIENT_TIMEOUT_MS);
   try {
     const res = await fetch("/api/ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
     if (!res.ok) return null;
     const data = await res.json();
     if (data?.result == null) return null;
     return { result: data.result, source: data.source === "ai" ? "ai" : "fallback" };
   } catch {
-    return null;
+    return null; // network error / AbortError → caller uses the keyed fallback
+  } finally {
+    clearTimeout(timer);
   }
 }
 

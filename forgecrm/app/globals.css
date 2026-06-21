@@ -1,8 +1,32 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* ── ForgeCRM brand palette (from the Modular AI CRM logo) ────────────────────
+   Navy #102a52 · Cyan #1ec8e6 · White. The design was built on Tailwind's
+   `indigo-*` accent; rather than touch 40+ class usages we remap the indigo
+   ramp to a brand ramp anchored on the logo's navy + cyan. Every existing
+   `bg/text/border-indigo-*` utility instantly reads on-brand, with button fills
+   (indigo-600/700) landing on navy so white text keeps its contrast, and the
+   light/-300 shades landing on cyan for icons, pills, and sidebar accents. */
+@theme {
+  --color-brand-navy: #102a52;
+  --color-brand-navy-deep: #0b1f3a;
+  --color-brand-cyan: #1ec8e6;
+
+  --color-indigo-50: #eef9fd;
+  --color-indigo-100: #d6f1fa;
+  --color-indigo-200: #ade3f4;
+  --color-indigo-300: #1ec8e6;
+  --color-indigo-400: #22b4d6;
+  --color-indigo-500: #1f8fb0;
+  --color-indigo-600: #102a52;
+  --color-indigo-700: #0c2143;
+  --color-indigo-800: #0a1a36;
+  --color-indigo-900: #08152b;
+  --color-indigo-950: #050d1c;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -55,8 +79,9 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #102a52;
   --primary-foreground: oklch(0.985 0 0);
+  --ring: #1ec8e6;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);

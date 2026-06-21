@@ -12,25 +12,29 @@ import {
   Users,
   CheckSquare,
   LifeBuoy,
+  Radar,
+  Megaphone,
   RotateCcw,
-  Flame,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { GlobalSearch } from "@/components/global-search";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pricing", label: "Pricing Engine", icon: Zap, hero: true },
-  { href: "/copilot", label: "Quote Copilot", icon: Bot, hero: true },
+  { href: "/pricing", label: "Pricing Engine", icon: Zap },
+  { href: "/copilot", label: "Quote Copilot", icon: Bot },
   { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },
   { href: "/accounts", label: "Accounts", icon: Building2 },
   { href: "/contacts", label: "Contacts", icon: Users },
   { href: "/tasks", label: "Tasks", icon: CheckSquare },
   { href: "/support", label: "Support", icon: LifeBuoy },
+  { href: "/leads", label: "Leads", icon: Radar },
+  { href: "/marketing", label: "Marketing", icon: Megaphone },
 ] as const;
 
 function useHydratedStore() {
@@ -64,17 +68,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <TooltipProvider>
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="hidden w-60 shrink-0 flex-col border-r bg-slate-950 text-slate-200 md:flex">
-          <div className="flex items-center gap-2 px-5 py-5">
-            <div className="flex size-8 items-center justify-center rounded-md bg-indigo-500 text-white">
-              <Flame className="size-4" />
-            </div>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold text-white">ForgeCRM</div>
-              <div className="text-[11px] text-slate-400">pricing as a sentence</div>
-            </div>
+        <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
+          <div className="flex items-center gap-3 px-5 py-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/forge-crm-icon.svg"
+              alt="ForgeCRM"
+              className="size-12 rounded-xl shadow-sm ring-1 ring-white/10"
+            />
+            <div className="text-2xl font-semibold tracking-tight text-white">ForgeCRM</div>
           </div>
-          <nav className="flex-1 space-y-0.5 px-3 py-2">
+          <nav className="flex flex-1 flex-col justify-evenly overflow-y-auto px-3 py-3">
             {NAV.map((item) => {
               const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -83,24 +87,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+                    "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] transition-colors",
                     active
                       ? "bg-indigo-500/15 font-medium text-white"
                       : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
                   )}
                 >
-                  <Icon className={cn("size-4", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
+                  <Icon className={cn("size-[18px]", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
                   {item.label}
-                  {"hero" in item && item.hero && (
-                    <span className="ml-auto rounded bg-indigo-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-indigo-300">
-                      hero
-                    </span>
-                  )}
                 </Link>
               );
             })}
           </nav>
-          <div className="px-4 py-4 text-[11px] text-slate-500">
+          <div className="px-5 py-4 text-[11px] text-slate-500">
             Solvimon track · GBP · 30-day periods
           </div>
         </aside>
@@ -109,9 +108,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-background/80 px-6 backdrop-blur">
             <div className="flex items-center gap-2 md:hidden">
-              <Flame className="size-4 text-indigo-500" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-6 rounded-md" />
               <span className="font-semibold">ForgeCRM</span>
             </div>
+            <GlobalSearch />
             <div className="ml-auto flex items-center gap-3">
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 In-memory demo data
