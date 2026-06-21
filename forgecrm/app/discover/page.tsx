@@ -48,6 +48,7 @@ export default function DiscoverPage() {
 
   // Live internet search state
   const [liveResults, setLiveResults] = useState<LivePost[] | null>(null);
+  const [liveSource, setLiveSource] = useState<"reddit" | "generated" | null>(null);
   const [liveLoading, setLiveLoading] = useState(false);
   // Track which live post IDs the user has contacted (local only — not persisted to store)
   const [contactedLive, setContactedLive] = useState<Set<string>>(new Set());
@@ -62,15 +63,17 @@ export default function DiscoverPage() {
         body: JSON.stringify({ query: query || "looking to rent UK" }),
       });
       if (res.ok) {
-        const { results } = (await res.json()) as { results: LivePost[] };
+        const { results, source } = (await res.json()) as { results: LivePost[]; source: string };
         setLiveResults(results);
-        if (results.length === 0) toast.info("No live results found — try different search terms");
-        else toast.success(`Found ${results.length} live post${results.length === 1 ? "" : "s"} from Reddit`);
+        setLiveSource(source === "reddit" ? "reddit" : source === "generated" ? "generated" : null);
+        if (results.length === 0) toast.info("No results found — try different search terms");
+        else if (source === "reddit") toast.success(`Found ${results.length} live post${results.length === 1 ? "" : "s"} from Reddit`);
+        else toast.success(`Found ${results.length} AI-matched lead${results.length === 1 ? "" : "s"}`);
       } else {
-        toast.error("Live search failed — check your connection");
+        toast.error("Search failed — check your connection");
       }
     } catch {
-      toast.error("Live search failed — check your connection");
+      toast.error("Search failed — check your connection");
     }
     setLiveLoading(false);
   }
@@ -162,11 +165,15 @@ export default function DiscoverPage() {
       {isLive && (
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 text-sm">
           <span className="flex items-center gap-1.5 font-medium text-emerald-700">
-            <Globe className="size-3.5" /> Live results from Reddit
+            <Globe className="size-3.5" />
+            {liveSource === "reddit" ? "Live results from Reddit" : "AI-matched leads"}
           </span>
-          <span className="text-emerald-600">· {liveResults.length} post{liveResults.length === 1 ? "" : "s"} · classified by AI</span>
+          <span className="text-emerald-600">
+            · {liveResults.length} post{liveResults.length === 1 ? "" : "s"}
+            {liveSource === "reddit" ? " · classified by AI" : " · generated from search pattern"}
+          </span>
           <button
-            onClick={() => { setLiveResults(null); setContactedLive(new Set()); }}
+            onClick={() => { setLiveResults(null); setLiveSource(null); setContactedLive(new Set()); }}
             className="ml-auto flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-800"
           >
             <X className="size-3" /> Show demo data
@@ -194,9 +201,9 @@ export default function DiscoverPage() {
                     <span className="text-sm font-semibold">{r.author}</span>
                     <span className="text-xs text-muted-foreground">{r.handle}</span>
                     <Badge variant="outline" className="text-[11px]">{PLATFORM_LABEL[r.platform]}</Badge>
-                    {redditUrl && (
+                    {isLive && (
                       <Badge variant="outline" className="gap-1 border-emerald-200 bg-emerald-50 text-[11px] text-emerald-700">
-                        <Globe className="size-2.5" /> Live
+                        <Globe className="size-2.5" /> {liveSource === "reddit" ? "Live" : "AI"}
                       </Badge>
                     )}
                     <span className="text-xs text-muted-foreground">· {relativeTime(r.postedAt)}</span>
