@@ -136,4 +136,28 @@ Dense, professional, light theme.
 
 **Wiring (Claude):** results from `searchPosts(socialPosts, query, platforms)` in
 `lib/aggregator`; `onSave`→`setLeadStatus(id,'saved')`, `onContact`→`setLeadStatus(id,'contacted')`.
-<!-- P6 Q&A agent — TODO -->
+### P6 — Knowledge / Q&A agent (REQ #2)  ✅ backend ready
+
+> Prepend the shared context block above, then:
+
+```
+Build a "Knowledge agent" page for a landlord CRM. It answers a new client question using
+answers the landlord gave in past conversations.
+
+Top: an "Ask the assistant" card — a text input ("e.g. 'Are bills included?'") with an
+"Ask" button. After asking, show a green "Best answer" panel with the answer in bold and a
+small "from a previous answer to: '<original question>'" line; below it a "Related" list of
+up to 3 other matches.
+
+Below, two columns:
+- "Knowledge base (n)": a scrollable list of Q&A entries — question (bold), answer (muted),
+  and small tag pills.
+- "Chat logs (n)": each log shows a doc icon + title, participants · N messages, and either
+  an "Extract Q&A" button (sparkle) or, once done, an "extracted" green badge.
+
+Props (no fetching): askedResult (top + related[]), qaEntries[], chatLogs[], and callbacks
+onAsk(q), onExtract(logId). Dense, professional, light theme.
+```
+
+**Wiring (Claude):** `onAsk`→`searchQA(qaEntries, q)`; `onExtract`→`POST /api/qa` (fallback
+`lib/qa.extractQA`) then `addQAEntries` + `markLogProcessed`.

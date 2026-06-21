@@ -18,6 +18,7 @@ import {
   Wrench,
   Bell,
   Compass,
+  MessagesSquare,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -35,6 +36,7 @@ const NAV = [
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/notices", label: "Notice board", icon: Bell },
   { href: "/discover", label: "Find tenants", icon: Compass },
+  { href: "/qa", label: "Knowledge", icon: MessagesSquare },
   { href: "/pricing", label: "Pricing Engine", icon: Zap },
   { href: "/copilot", label: "Quote Copilot", icon: Bot },
   { href: "/pipeline", label: "Pipeline", icon: KanbanSquare },

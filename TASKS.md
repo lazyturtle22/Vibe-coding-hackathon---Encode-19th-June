@@ -68,9 +68,9 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 6 — REQ #2: Q&A agent from chat logs  ⭐ (net-new, Acquisition)
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 6.1 | Chat-log store + **Q&A extraction** AI route — from a pasted/seeded sales conversation, extract {question, solution, tags} pairs, persist | Claude | ⬜ | tool-use + Zod + fallback; seed a few logs |
-| 6.2 | **Q&A search agent** AI route — given a new question, return the best stored solution(s) | Claude | ⬜ | keyword/embedding-lite over stored QA; fallback = keyword match |
-| 6.3 | Q&A UI: import/paste chat log → extracted Q&A list; ask-a-question search box with answers | 🅥 v0 | ⬜ | v0 prompt; Claude wires |
+| 6.1 | `lib/qa.ts` `extractQA` + `app/api/qa/route.ts` (Claude tool-use extraction + fallback) | Claude | ✅ | pairs client-Q→landlord-A; Zod schema; server logs |
+| 6.2 | `lib/qa.ts` `searchQA` — keyword-overlap ranking over stored QA | Claude | ✅ | best match first; stopword-filtered |
+| 6.3 | Knowledge page `app/qa/page.tsx` + nav | Claude→🅥 | 🔄 | **Functional DONE + verified** (ask "are bills included"→best answer traced to source; KB(4); logs extract; 0 errors). v0 prompt ready |
 
 ## Phase 7 — Brand, polish, submission
 | ID | Task | Owner | Status | Notes |
