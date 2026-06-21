@@ -76,8 +76,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-14 shrink-0 rounded-2xl shadow-sm ring-1 ring-white/10" />
             <span className="hidden whitespace-nowrap text-2xl font-semibold tracking-tight text-white group-hover/side:inline">ForgeCRM</span>
           </div>
-          <nav className="flex flex-1 flex-col gap-1.5 px-3 py-3">
-            {NAV.slice(0, -1).map((item) => {
+          <nav className="flex flex-1 flex-col justify-between px-3 py-4">
+            {NAV.map((item, idx) => {
+              const isLast = idx === NAV.length - 1;
               const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               const Icon = item.icon;
               return (
@@ -87,6 +88,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   title={item.label}
                   className={cn(
                     "group/item flex items-center justify-center gap-3.5 rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors group-hover/side:justify-start",
+                    isLast && "border-t border-white/5 pt-3",
                     active ? "bg-indigo-500/25 text-white" : "text-slate-300 hover:bg-slate-800/70 hover:text-white",
                   )}
                 >
@@ -95,27 +97,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Link>
               );
             })}
-            {/* Pin the last item (Data & privacy) to the bottom */}
-            <div className="mt-auto border-t border-white/5 pt-2">
-              {(() => {
-                const item = NAV[NAV.length - 1];
-                const active = pathname === item.href;
-                const Icon = item.icon;
-                return (
-                  <Link
-                    href={item.href}
-                    title={item.label}
-                    className={cn(
-                      "group/item flex items-center justify-center gap-3.5 rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors group-hover/side:justify-start",
-                      active ? "bg-indigo-500/25 text-white" : "text-slate-300 hover:bg-slate-800/70 hover:text-white",
-                    )}
-                  >
-                    <Icon className={cn("size-[22px] shrink-0", active ? "text-cyan-300" : "text-slate-400 group-hover/item:text-white")} />
-                    <span className="hidden whitespace-nowrap group-hover/side:inline">{item.label}</span>
-                  </Link>
-                );
-              })()}
-            </div>
           </nav>
           <div className="hidden whitespace-nowrap px-5 py-4 text-[11px] text-slate-500 group-hover/side:block">For private accommodation landlords · GBP</div>
         </aside>
