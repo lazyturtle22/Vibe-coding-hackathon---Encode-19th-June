@@ -7,6 +7,27 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [style · Coder C] Pricing engine: fill the empty pre-compile left column
+
+**Commit scope:** `app/pricing/page.tsx`.
+
+- Before a rule is compiled, the left two-thirds was empty below the input. Added a panel
+  shown while no rule is compiled: a 3-step "How the pricing engine works" strip
+  (Describe → Compile → Re-price) plus a live **"Rules currently on the book"** list
+  (seeded legacy rule + anything applied), each with its source sentence and effect chips.
+- Disappears once a rule is compiled, handing the space to the results — so no layout fight.
+- **Revert effect:** removes the empty-state panel; the column is blank pre-compile again.
+
+## [style · Coder C] Pipeline: full-height kanban (no empty bottom half)
+
+**Commit scope:** `app/pipeline/page.tsx`.
+
+- The board columns were only as tall as their cards, so the bottom ~half of the screen was
+  blank. Columns now fill the viewport (`h-[calc(100vh-11rem)]`, column `h-full`), each card
+  list scrolls within its column (`flex-1 overflow-y-auto`), and an empty stage shows a
+  full-height "Drop here" target. Reads as a real kanban board; drag/drop logic unchanged.
+- **Revert effect:** restores the content-height columns and the small top-aligned drop box.
+
 ## [docs · Coder B] Aggregate `npm run check` + README sync
 
 **Commit scope:** `package.json`, `README.md`.

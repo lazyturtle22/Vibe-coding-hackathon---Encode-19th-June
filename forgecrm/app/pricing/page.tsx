@@ -5,7 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { ArrowRight, Loader2, Sparkles, TrendingUp, Wand2, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
-import { RuleCard } from "@/components/rule-card";
+import { RuleCard, describeEffect } from "@/components/rule-card";
 import { InvoiceView } from "@/components/invoice-view";
 import { SourceBadge } from "@/components/badges";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ export default function PricingPage() {
 
   const liveSim = useMemo(() => (rule ? simulateRule(data, rule) : null), [data, rule]);
   const sim = applied ? snapshot : liveSim;
+  const activeRules = data.rules.filter((r) => r.active);
 
   async function compile(text: string) {
     const p = text.trim();
@@ -101,6 +102,62 @@ export default function PricingPage() {
               ))}
             </div>
           </Card>
+
+          {!rule && (
+            <Card className="gap-0 p-5">
+              <div className="text-sm font-semibold">How the pricing engine works</div>
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                {[
+                  { icon: Sparkles, t: "Describe", d: "Type a billing change or pick a one-click prompt above." },
+                  { icon: Wand2, t: "Compile", d: "Claude turns the sentence into a structured, auditable rule." },
+                  { icon: TrendingUp, t: "Re-price", d: "The engine re-runs every invoice and shows the revenue delta." },
+                ].map((s, i) => (
+                  <div key={i} className="rounded-lg border bg-card p-3">
+                    <div className="flex items-center gap-2 text-sm font-medium">
+                      <s.icon className="size-4 text-indigo-500" />
+                      <span className="text-muted-foreground">{i + 1}.</span> {s.t}
+                    </div>
+                    <p className="mt-1.5 text-xs text-muted-foreground">{s.d}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 border-t pt-4">
+                <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  Rules currently on the book ({activeRules.length})
+                </div>
+                {activeRules.length === 0 ? (
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    No custom rules yet — every account bills at standard plan rates.
+                  </p>
+                ) : (
+                  <div className="mt-2 space-y-2">
+                    {activeRules.map((r) => (
+                      <div key={r.id} className="rounded-lg border bg-card p-3">
+                        <div className="text-sm font-medium">{r.name}</div>
+                        <div className="mt-0.5 text-xs italic text-muted-foreground">“{r.sourcePrompt}”</div>
+                        <div className="mt-1.5 flex flex-wrap gap-1">
+                          {r.effects.map((e, i) => (
+                            <span
+                              key={i}
+                              className="rounded bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground"
+                            >
+                              {describeEffect(e)}
+                            </span>
+                          ))}
+                          {r.grandfather && (
+                            <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] text-amber-700">
+                              grandfathered
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Card>
+          )}
 
           {rule && sim && (
             <div className="space-y-4">
