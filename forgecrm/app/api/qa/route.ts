@@ -5,6 +5,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { QAExtractionSchema, qaToolSchema, extractQA } from "@/lib/qa";
+import { redactContact } from "@/lib/redact";
 import type { ChatLog } from "@/types/property";
 
 export const runtime = "nodejs";
@@ -40,7 +41,8 @@ export async function POST(req: Request) {
   }
 
   if (client) {
-    const transcript = log.messages.map((m) => `${m.role === "landlord" ? "Landlord" : "Client"} (${m.name}): ${m.text}`).join("\n");
+    // Redact direct identifiers before sending tenant content to the LLM (data minimisation).
+    const transcript = log.messages.map((m) => `${m.role === "landlord" ? "Landlord" : "Client"} (${m.name}): ${redactContact(m.text)}`).join("\n");
     try {
       const msg = await client.messages.create(
         {

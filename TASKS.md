@@ -87,7 +87,7 @@ all routes property-only, 0 errors. App is now purely property-domain.
 | 8.2 | **Real AI live:** add `ANTHROPIC_API_KEY` in Vercel env (Production+Preview) so maintenance/qa + new routes use real Claude | **user** | ⬜ | routes already wired w/ fallback; user funds key "later". Model `claude-sonnet-4-6` |
 | 8.3 | **Acquisition AI** `lib/outreach.ts` + `app/api/outreach` + Find-tenants "Draft" button | Claude | ✅ | matches lead→available property, drafts personalised DM + fit reason; verified (Wakefield→Rosebank). Real Claude when key funded, else deterministic. |
 | 8.4 | **Management AI (behavioural):** `app/api/insights` — find tenants with similar traits, surface patterns/risk (repeat-late payers, churn signals), "remembered" behaviour over time, suggested next actions; surface on dashboard + a tenant view | Claude | ⬜ | deterministic signal layer + AI summary w/ fallback |
-| 8.5 | **Data protection:** redact tenant PII (email/phone/surname) BEFORE sending to the LLM (data-minimisation to the processor); add a visible data-protection note; tenant data **export + delete** actions; retention note | Claude | ⬜ | important — UK tenant PII. `lib/redact.ts` + settings/note |
+| 8.5 | **Data protection** `lib/redact.ts` (redact email/phone/surname before LLM) applied in qa+maintenance routes; `app/privacy` page (UK-GDPR note + export-JSON + per-tenant erasure via store.deleteTenant) + nav | Claude | ✅ | verified: redaction masks phone/email/full-name; page + export + erase work, 0 errors |
 
 ---
 

@@ -10,6 +10,7 @@ import {
   Wallet,
   Wrench,
   Bell,
+  ShieldCheck,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ const NAV = [
   { href: "/payments", label: "Payments", icon: Wallet },
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/notices", label: "Notice board", icon: Bell },
+  { href: "/privacy", label: "Data & privacy", icon: ShieldCheck },
 ] as const;
 
 // Mobile bottom bar — five most-used.

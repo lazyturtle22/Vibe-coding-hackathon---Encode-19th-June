@@ -1,5 +1,21 @@
 # ForgeCRM — Changelog
 
+## [Phase 8 · data protection] PII redaction + Data & privacy page (8.5)
+
+**Commit scope:** `lib/redact.ts` (new), `app/api/qa/route.ts`, `app/api/maintenance/route.ts`,
+`lib/property-store.ts`, `app/privacy/page.tsx` (new), `components/app-shell.tsx`.
+
+- **Data minimisation to the AI:** `lib/redact.ts` masks emails + phone numbers and reduces full
+  names to first names; applied to all tenant content **before** it's sent to Claude in the qa +
+  maintenance routes. Verified: "07700 900123 … amelia.hart@example.com — Amelia Hart" →
+  "[phone redacted] … [email redacted] — Amelia".
+- **Data & privacy page** (`/privacy`): a UK-GDPR statement, **Export all data (JSON)** (right of
+  access/portability), and per-tenant **Erase** (right to erasure) via a new `deleteTenant` store
+  action that cascades to the tenant's payments, maintenance, tenancies and notices.
+- **Revert effect:** removes the redaction calls, the privacy page + nav item, and `deleteTenant`.
+
+
+
 ## [Phase 8 · AI] Acquisition AI — match lead to property + draft outreach (8.3)
 
 **Commit scope:** `lib/outreach.ts` (new), `app/api/outreach/route.ts` (new), `app/discover/page.tsx`.

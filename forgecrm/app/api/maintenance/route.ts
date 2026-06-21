@@ -6,6 +6,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { MaintenanceTriageSchema, maintenanceToolSchema, triageMaintenance } from "@/lib/maintenance";
+import { redactContact } from "@/lib/redact";
 
 export const runtime = "nodejs";
 
@@ -46,7 +47,7 @@ export async function POST(req: Request) {
           model: MODEL,
           max_tokens: 1024,
           system: SYSTEM,
-          messages: [{ role: "user", content: `Title: ${title}\nDescription: ${description}` }],
+          messages: [{ role: "user", content: `Title: ${redactContact(title)}\nDescription: ${redactContact(description)}` }],
           tools: [
             {
               name: "emit_triage",
