@@ -38,7 +38,7 @@ export default function PipelinePage() {
         title="Sales pipeline"
         subtitle="Drag deals across stages. Moving a card logs an activity; the copilot's Send Quote advances cards here automatically."
       />
-      <div className="flex h-[calc(100vh-11rem)] gap-3 pb-2">
+      <div className="flex h-[calc(100vh-12rem)] gap-3 overflow-hidden">
         {DEAL_STAGES.map((stage) => {
           const stageDeals = data.deals.filter((d) => d.stage === stage);
           const total = stageDeals.reduce((s, d) => s + d.value, 0);

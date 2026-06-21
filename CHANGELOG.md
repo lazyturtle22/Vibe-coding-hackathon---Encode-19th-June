@@ -7,6 +7,26 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [feat] Tasks: tick-to-complete animation + "Done" filter
+
+**Commit scope:** `app/tasks/page.tsx`.
+
+- Ticking a task in the Open (or Overdue) view now plays a ~0.5s exit: the checkbox + strike
+  -through land, the row holds for 600ms, then fades/slides out before the filter drops it.
+  Implemented with an `exiting` id set that defers the actual `toggleTask` until after the
+  animation and renders the toggled state in the meantime.
+- Added a **Done** filter (Open / Overdue / Done / All) showing completed tasks.
+- **Revert effect:** instant toggle (task vanishes immediately) and no Done filter.
+
+## [style] Pipeline: drop the redundant outer scrollbar
+
+**Commit scope:** `app/pipeline/page.tsx`.
+
+- The board height left an ~8px document overflow, so a page-level scrollbar sat on the right
+  even though each column already scrolls its own cards. Board height tightened to
+  `calc(100vh-12rem)` with `overflow-hidden`, removing the outer scroll (verified 0px overflow).
+- **Revert effect:** restores the ~8px outer scrollbar.
+
 ## [feat · Coder D] P2 surfaces: global search, social listening, marketing maker
 
 **Commit scope:** `components/global-search.tsx` (new), `app/leads/page.tsx` (new),
