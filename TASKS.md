@@ -62,8 +62,8 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 5 — REQ #1: Social media post aggregator  ⭐ (Attraction)
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 5.1 | Aggregator logic `lib/aggregator.ts` — search term(s) + platform filter over a seeded post corpus; relevance/intent tag; "contact"→creates a lead/deal | Claude | ⬜ | live connectors are non-goal; rich seeded corpus. Real search-term input (vs the old static feed) |
-| 5.2 | Aggregator UI: search bar (terms + platform multiselect), results feed, save/contact actions | 🅥 v0 | ⬜ | v0 prompt; Claude wires. Reuse leads-feed shape |
+| 5.1 | Aggregator logic `lib/aggregator.ts` — term+platform search over seeded corpus, relevance rank, relative time | Claude | ✅ | real search (multi-term, platform filter) over `socialPosts` |
+| 5.2 | Aggregator page `app/discover/page.tsx` ("Find tenants") + nav | Claude→🅥 | 🔄 | **Functional DONE + verified** (search "LS6 2-bed"→3 ranked, intent/location/save/contact, 0 errors). v0 prompt ready |
 
 ## Phase 6 — REQ #2: Q&A agent from chat logs  ⭐ (net-new, Acquisition)
 | ID | Task | Owner | Status | Notes |

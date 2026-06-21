@@ -110,5 +110,30 @@ onSendNow(id). Dense, professional, light theme.
 **Wiring (Claude):** props from `usePropertyData()` + `lib/notices` (`noticeTargetLabel`,
 `NOTICE_TEMPLATES`, `defaultScheduleLocal`); `onSchedule`→`scheduleNotice`,
 `onSendNow`→`sendNotice`. Auto late-rent reminders come from `generateLateReminders`.
-<!-- P5 Social aggregator — TODO -->
+### P5 — Find tenants / social aggregator (REQ #1)  ✅ backend ready
+
+> Prepend the shared context block above, then:
+
+```
+Build a "Find tenants" page for a landlord CRM — a social-media aggregator that surfaces
+people looking to rent.
+
+Top: a big search bar (magnifier icon) with placeholder "Search terms, e.g. '2-bed LS6
+September'", and below it a row of platform filter chips (Reddit, Facebook, X, Property
+forum, Gumtree) that toggle on/off (active = filled indigo), plus a "clear" link.
+
+Below: "N matching posts", then a feed of result cards. Each card: author + handle +
+platform pill + relative time ("19h ago"); the post text; then a row with an intent pill
+(Looking to rent = green, Looking to let = blue, Frustrated landlord = amber, Market
+question = grey), a location with a map-pin, a contact-status pill if not "new", and on the
+right a "Save" (bookmark) and "Contact" (user-plus) button. Once contacted, show a green
+"reached out" tick instead.
+
+Props (no fetching): results[] (already filtered+ranked), platform filter state, query
+state, and callbacks onSearch(q), onTogglePlatform(p), onSave(id), onContact(id).
+Dense, professional, light theme.
+```
+
+**Wiring (Claude):** results from `searchPosts(socialPosts, query, platforms)` in
+`lib/aggregator`; `onSave`→`setLeadStatus(id,'saved')`, `onContact`→`setLeadStatus(id,'contacted')`.
 <!-- P6 Q&A agent — TODO -->
