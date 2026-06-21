@@ -10,6 +10,8 @@ import {
   Wallet,
   Wrench,
   Bell,
+  BrainCircuit,
+  ShieldCheck,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -27,6 +29,8 @@ const NAV = [
   { href: "/payments", label: "Payments", icon: Wallet },
   { href: "/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/notices", label: "Notice board", icon: Bell },
+  { href: "/insights", label: "Insights", icon: BrainCircuit },
+  { href: "/privacy", label: "Data & privacy", icon: ShieldCheck },
 ] as const;
 
 // Mobile bottom bar — five most-used.
@@ -65,13 +69,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <TooltipProvider>
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-white/5 bg-brand-navy-deep text-slate-200 md:flex">
-          <div className="flex items-center gap-3 px-5 py-6">
+        {/* Sidebar — a thin icon rail that slides open on hover */}
+        <aside className="group/side fixed left-0 top-0 z-40 hidden h-screen w-20 flex-col overflow-hidden border-r border-white/5 bg-brand-navy-deep text-slate-200 transition-[width] duration-200 ease-out hover:w-64 hover:shadow-2xl md:flex">
+          <div className="flex h-[84px] items-center justify-center gap-3 px-3 group-hover/side:justify-start group-hover/side:px-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-12 rounded-xl shadow-sm ring-1 ring-white/10" />
-            <div className="text-2xl font-semibold tracking-tight text-white">ForgeCRM</div>
+            <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-14 shrink-0 rounded-2xl shadow-sm ring-1 ring-white/10" />
+            <span className="hidden whitespace-nowrap text-2xl font-semibold tracking-tight text-white group-hover/side:inline">ForgeCRM</span>
           </div>
-          <nav className="flex flex-1 flex-col justify-evenly overflow-y-auto px-3 py-3">
+          <nav className="flex flex-1 flex-col gap-1.5 px-3 py-3">
             {NAV.map((item) => {
               const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
               const Icon = item.icon;
@@ -79,22 +84,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
+                  title={item.label}
                   className={cn(
-                    "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] transition-colors",
-                    active ? "bg-indigo-500/15 font-medium text-white" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100",
+                    "group/item flex items-center justify-center gap-3.5 rounded-lg px-3.5 py-2.5 text-[15px] font-medium transition-colors group-hover/side:justify-start",
+                    active ? "bg-indigo-500/25 text-white" : "text-slate-300 hover:bg-slate-800/70 hover:text-white",
                   )}
                 >
-                  <Icon className={cn("size-[18px]", active ? "text-indigo-300" : "text-slate-500 group-hover:text-slate-300")} />
-                  {item.label}
+                  <Icon className={cn("size-[22px] shrink-0", active ? "text-cyan-300" : "text-slate-400 group-hover/item:text-white")} />
+                  <span className="hidden whitespace-nowrap group-hover/side:inline">{item.label}</span>
                 </Link>
               );
             })}
           </nav>
-          <div className="px-5 py-4 text-[11px] text-slate-500">For private accommodation landlords · GBP</div>
+          <div className="hidden whitespace-nowrap px-5 py-4 text-[11px] text-slate-500 group-hover/side:block">For private accommodation landlords · GBP</div>
         </aside>
 
         {/* Main */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col md:ml-20">
           <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b bg-background/80 px-6 backdrop-blur">
             <div className="flex items-center gap-2 md:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}

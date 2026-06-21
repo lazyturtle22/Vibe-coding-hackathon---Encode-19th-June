@@ -80,6 +80,15 @@ all routes property-only, 0 errors. App is now purely property-domain.
 | 7.3 | `npm run build` green; deploy to Vercel; URL in README | Claude+user | 🔄 | build green; **deploy = user** (own Vercel acct; root dir `forgecrm`) |
 | 7.4 | Demo script for the 5 requirements | Claude | ⬜ | optional — DEPLOY.md has deploy steps |
 
+## Phase 8 — AI deepening, data protection, UX polish  (requested 2026-06-21; branch `phase8-ai-ux`)
+| ID | Task | Owner | Status | Notes |
+|----|------|-------|--------|-------|
+| 8.1 | **UX:** auto-collapsing sidebar that slides open on hover; bigger logo; higher-contrast tabs | Claude | ✅ | fixed rail `w-20 hover:w-64`, slides over content; logo size-12→14; tabs text-slate-300/size-[22px]/font-medium, active cyan. Verified collapsed+hover. |
+| 8.2 | **Real AI live:** add `ANTHROPIC_API_KEY` in Vercel env (Production+Preview) so maintenance/qa + new routes use real Claude | **user** | ⬜ | routes already wired w/ fallback; user funds key "later". Model `claude-sonnet-4-6` |
+| 8.3 | **Acquisition AI** `lib/outreach.ts` + `app/api/outreach` + Find-tenants "Draft" button | Claude | ✅ | matches lead→available property, drafts personalised DM + fit reason; verified (Wakefield→Rosebank). Real Claude when key funded, else deterministic. |
+| 8.4 | **Management AI** `lib/insights.ts` (behavioural signals over time + cohorts of similar traits) + `app/api/insights` (AI summary+actions, name-redacted, fallback) + `app/insights` page + nav | Claude | ✅ | verified: 2 flight-risks flagged, cohorts (flight-risk/late/renewal/reliable), per-tenant profiles, suggested actions, 0 errors |
+| 8.5 | **Data protection** `lib/redact.ts` (redact email/phone/surname before LLM) applied in qa+maintenance routes; `app/privacy` page (UK-GDPR note + export-JSON + per-tenant erasure via store.deleteTenant) + nav | Claude | ✅ | verified: redaction masks phone/email/full-name; page + export + erase work, 0 errors |
+
 ---
 
 ## Suggested execution order

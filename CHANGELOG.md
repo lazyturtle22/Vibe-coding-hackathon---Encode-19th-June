@@ -1,5 +1,64 @@
 # ForgeCRM — Changelog
 
+## [Phase 8 · AI] Management AI — behavioural insights + cohorts (8.4)
+
+**Commit scope:** `lib/insights.ts` (new), `app/api/insights/route.ts` (new), `app/insights/page.tsx`
+(new), `components/app-shell.tsx`.
+
+- Learns each tenant's behaviour **over time** (rent on-time rate + late history, maintenance load,
+  renewal proximity) into a deterministic signal + risk level, and groups tenants with **similar
+  traits** into cohorts (flight-risk, repeat-late, renewal-due, reliable).
+- `/api/insights` (Claude tool-use, names reduced to first names before the call) summarises the
+  signals into a headline, patterns, and **per-tenant suggested actions**; deterministic fallback.
+- New **Insights** page + nav. Verified: flags the 2 flight-risk tenants with retention actions.
+- **Revert effect:** removes the insights page, route, lib, and nav item.
+
+
+
+## [Phase 8 · data protection] PII redaction + Data & privacy page (8.5)
+
+**Commit scope:** `lib/redact.ts` (new), `app/api/qa/route.ts`, `app/api/maintenance/route.ts`,
+`lib/property-store.ts`, `app/privacy/page.tsx` (new), `components/app-shell.tsx`.
+
+- **Data minimisation to the AI:** `lib/redact.ts` masks emails + phone numbers and reduces full
+  names to first names; applied to all tenant content **before** it's sent to Claude in the qa +
+  maintenance routes. Verified: "07700 900123 … amelia.hart@example.com — Amelia Hart" →
+  "[phone redacted] … [email redacted] — Amelia".
+- **Data & privacy page** (`/privacy`): a UK-GDPR statement, **Export all data (JSON)** (right of
+  access/portability), and per-tenant **Erase** (right to erasure) via a new `deleteTenant` store
+  action that cascades to the tenant's payments, maintenance, tenancies and notices.
+- **Revert effect:** removes the redaction calls, the privacy page + nav item, and `deleteTenant`.
+
+
+
+## [Phase 8 · AI] Acquisition AI — match lead to property + draft outreach (8.3)
+
+**Commit scope:** `lib/outreach.ts` (new), `app/api/outreach/route.ts` (new), `app/discover/page.tsx`.
+
+- "Get those customers": each lead on **Find tenants** gets a **Draft** button that calls
+  `/api/outreach` — Claude tool-use matches the post to the landlord's best-fitting **available**
+  property (by area + bedrooms) and writes a short, personalised first message; falls back to a
+  deterministic draft (`lib/outreach.draftOutreach`) with no key. Shows the message + a fit reason,
+  with **Copy** and **Send & mark contacted**. Verified: a Wakefield WF1 lead → "9 Rosebank Close, 3-bed
+  WF1, £1,150/mo".
+- **Revert effect:** removes the Draft button/panel, the route, and `lib/outreach.ts`.
+
+
+
+## [Phase 8 · UX] Hover-slide sidebar + bigger logo + higher-contrast tabs (8.1)
+
+**Commit scope:** `components/app-shell.tsx`, `TASKS.md`.
+
+- Sidebar is now a thin **icon rail** (`w-20`) that **slides open on hover** to `w-64`, overlaying
+  the content (no reflow) — neater. Logo enlarged (size-12 → 14); tabs brighter and larger
+  (`text-slate-300`, `size-[22px]` icons, `font-medium`), active tab in cyan. Main content offset
+  `md:ml-20`. Mobile bottom-bar unchanged.
+- Kicks off **Phase 8** (see `TASKS.md`): deeper AI for acquisition + management, data protection,
+  real-AI key. Work is on branch `phase8-ai-ux` to keep `main` (the live demo) stable.
+- **Revert effect:** restores the always-open `w-60` sidebar.
+
+
+
 ## [PIVOT] Property-management reframe — kickoff (branch `property-pivot`)
 
 ForgeCRM repositions from a usage-based-billing B2B CRM to its real product (per the pitch deck):

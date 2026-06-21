@@ -96,6 +96,9 @@ interface Actions {
   addChatLog: (log: Omit<ChatLog, "id" | "processed">) => string;
   addQAEntries: (entries: Omit<QAEntry, "id" | "createdAt">[]) => void;
   markLogProcessed: (id: string) => void;
+
+  // Data protection — right to erasure (cascades to the tenant's records)
+  deleteTenant: (id: string) => void;
 }
 
 export type PropertyState = Entities & Actions;
@@ -226,6 +229,20 @@ export const usePropertyStore = create<PropertyState>()(
         set((s) => ({
           chatLogs: s.chatLogs.map((l) => (l.id === id ? { ...l, processed: true } : l)),
         })),
+
+      deleteTenant: (id) =>
+        set((s) => {
+          const tenancies = s.tenancies
+            .map((t) => ({ ...t, tenantIds: t.tenantIds.filter((x) => x !== id) }))
+            .filter((t) => t.tenantIds.length > 0);
+          return {
+            tenants: s.tenants.filter((t) => t.id !== id),
+            payments: s.payments.filter((p) => p.tenantId !== id),
+            maintenance: s.maintenance.filter((m) => m.tenantId !== id),
+            notices: s.notices.filter((n) => !(n.targetKind === "tenant" && n.targetId === id)),
+            tenancies,
+          };
+        }),
     }),
     {
       name: "forgecrm-property",
