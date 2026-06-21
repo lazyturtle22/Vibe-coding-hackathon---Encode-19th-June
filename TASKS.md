@@ -23,8 +23,8 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 0 — Foundation & reframe  (Claude)
 | ID | Task | Owner | Status | Notes / acceptance |
 |----|------|-------|--------|--------------------|
-| 0.1 | Create this task table + `V0_PROMPTS.md` + CHANGELOG pivot entry | Claude | 🔄 | committed on `property-pivot` |
-| 0.2 | **Property domain data model** `types/property.ts` | Claude | ⬜ | Property, Tenant, Tenancy, Payment(rent/deposit/bill), MaintenanceRequest, Notice/ScheduledMessage, SocialLead, QAEntry, Landlord. Zod where it feeds AI. |
+| 0.1 | Create this task table + `V0_PROMPTS.md` + CHANGELOG pivot entry | Claude | ✅ | committed on `property-pivot` |
+| 0.2 | **Property domain data model** `types/property.ts` | Claude | ✅ | Landlord, Property, Tenant, Tenancy, Payment, MaintenanceRequest+Triage, Notice, SocialPost, ChatLog, QAEntry + label maps. tsc clean. |
 | 0.3 | **Seed data** `data/seed.ts` (replace CRM seed) | Claude | ⬜ | ~8 properties, tenants, tenancies; payments incl. late/pending; maintenance reqs; notices; social leads; chat-log/QA. Engineer 2–3 "late rent" + 1 maintenance escalation for demo. |
 | 0.4 | **Store + repository** extend for property entities + actions | Claude | ⬜ | addPayment/markPaid, addMaintenance/triage, scheduleNotice/send, saveLead/contact, addQA. Keep `resetToSeed`. |
 | 0.5 | Reframe shell + brand: tagline → "AI-native CRM for private accommodation landlords"; nav reflects property modules | Claude | ⬜ | depends on which pages survive (Phase 1) |
