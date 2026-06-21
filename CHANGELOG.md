@@ -7,6 +7,34 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [docs · submission] Deploy/submission prep — screenshots, README, DEPLOY.md, env template
+
+**Commit scope:** `DEPLOY.md` (new, repo root), `forgecrm/README.md`,
+`forgecrm/docs/screenshots/*.png` (new ×5), `forgecrm/.env.local.example` (new),
+`forgecrm/.gitignore`.
+
+Addresses the review critique's submission essentials (#1, #2, #3, #8) that don't require a
+funded key:
+
+- **Screenshots (#2):** five 2× captures (pricing hero, copilot, dashboard, pipeline,
+  Customer 360 billing) under `forgecrm/docs/screenshots/`, embedded in the README with a
+  gallery and a `▶ Live demo:` URL placeholder.
+- **`.env.local.example` (deploy hygiene):** the README referenced it but it didn't exist.
+  Added it (documents `ANTHROPIC_API_KEY`, no secret) and a `.gitignore` exception
+  (`!.env.local.example` / `!.env.example`) so the template is tracked while real `.env*`
+  stays ignored.
+- **README Deploy section (#1):** zero-config Vercel steps (`npx vercel`), the `forgecrm`
+  root-directory gotcha, and the env-var note.
+- **`DEPLOY.md` runbook (#1/#3/#8):** the instruction file — pre-flight `npm run check`,
+  Vercel deploy (CLI + dashboard), key setup, a real-AI round-trip verification keyed to the
+  "Compiled by Claude" vs "Deterministic fallback" badge + the `[ai]` server logs (the bug #4
+  diagnosis path), ready-to-paste GitHub description/topics + a `gh` one-liner, the
+  branch/merge plan, and a checklist mapping all ten critique points to status.
+- **No auto-deploy:** deployment/GitHub-metadata are left as documented steps because they
+  publish to the user's own Vercel/GitHub accounts.
+- **Revert effect:** removes the screenshots, env template, DEPLOY.md, and the README
+  gallery/deploy sections.
+
 ## [feat] Tasks: tick-to-complete animation + "Done" filter
 
 **Commit scope:** `app/tasks/page.tsx`.
