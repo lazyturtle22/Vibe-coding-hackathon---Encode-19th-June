@@ -12,12 +12,15 @@ import {
   Users,
   CheckSquare,
   LifeBuoy,
+  Radar,
+  Megaphone,
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { GlobalSearch } from "@/components/global-search";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +33,8 @@ const NAV = [
   { href: "/contacts", label: "Contacts", icon: Users },
   { href: "/tasks", label: "Tasks", icon: CheckSquare },
   { href: "/support", label: "Support", icon: LifeBuoy },
+  { href: "/leads", label: "Leads", icon: Radar },
+  { href: "/marketing", label: "Marketing", icon: Megaphone },
 ] as const;
 
 function useHydratedStore() {
@@ -112,6 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <img src="/brand/forge-crm-icon.svg" alt="ForgeCRM" className="size-6 rounded-md" />
               <span className="font-semibold">ForgeCRM</span>
             </div>
+            <GlobalSearch />
             <div className="ml-auto flex items-center gap-3">
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 In-memory demo data

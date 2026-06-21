@@ -7,6 +7,36 @@ Format: newest first. Severity tags match the audited backend bug list.
 
 ---
 
+## [feat · Coder D] P2 surfaces: global search, social listening, marketing maker
+
+**Commit scope:** `components/global-search.tsx` (new), `app/leads/page.tsx` (new),
+`app/marketing/page.tsx` (new), `components/app-shell.tsx`.
+
+- **Global search (§6.10):** a header search box with a live grouped dropdown over accounts,
+  contacts and deals (each links through to the account 360). Plain record lookup, distinct
+  from the pricing NL bar. Closes on outside-click; hidden on mobile.
+- **Social listening / Leads (§6.12):** a static seeded feed of buying-intent signals with a
+  recency filter (24h / 7d / All), colour-coded signal badges, and a "Notify me" toast.
+  Demo data only — no live social APIs (a stated non-goal).
+- **Marketing maker (§6.12):** pick a segment (a store tag) and a channel (Email / LinkedIn /
+  SMS) → deterministic templated copy for that segment, with Copy-to-clipboard and a
+  "Send to segment" toast. The upsell-target segment is exactly the leakage accounts, tying it
+  to the hero story. No real AI.
+- **App shell:** added Leads + Marketing nav items (Radar / Megaphone) and mounted the search
+  box in the header. The §6.12 surfaces are spec'd "cut-by-default"; built now because P0/P1
+  are solid.
+- **Revert effect:** removes the two pages + search component and their nav/header wiring.
+
+## [style · Coder D] Pipeline: fit all six stages within the screen (no horizontal scroll)
+
+**Commit scope:** `app/pipeline/page.tsx`.
+
+- The board used fixed-width (`w-72`) columns with `overflow-x-auto`, so the last stages were
+  off-screen behind a horizontal scrollbar. Columns are now flexible (`flex-1 min-w-0`, `gap-3`,
+  no horizontal scroll), so all six stages (Lead → Closed Lost) fit within the viewport width.
+  Full-height behaviour from the previous Coder C change is preserved.
+- **Revert effect:** restores fixed-width, horizontally-scrolling columns.
+
 ## [style · Coder C] Pricing engine: fill the empty pre-compile left column
 
 **Commit scope:** `app/pricing/page.tsx`.
