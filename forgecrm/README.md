@@ -19,19 +19,6 @@ honest.
 | **Maintenance** (`/maintenance`) | Management | AI triages a tenant's issue into an ideal fix, a **guided "photograph X" checklist**, and **escalates to you with a summary** when it needs a pro. |
 | **Notice board** (`/notices`) | Management | Compose and **schedule** SMS/email notices to your whole portfolio, one property, or a single tenant. |
 
-## Screenshots
-
-**Dashboard** — occupancy, rent, overdue, and open maintenance at a glance:
-
-![Dashboard](docs/screenshots/dashboard.png)
-
-| Payments — rent & bill tracker | Maintenance — triage + guided photos |
-|---|---|
-| ![Payments](docs/screenshots/payments.png) | ![Maintenance](docs/screenshots/maintenance.png) |
-
-| Find tenants — social aggregator | Knowledge — Q&A from past chats |
-|---|---|
-| ![Find tenants](docs/screenshots/discover.png) | ![Knowledge](docs/screenshots/qa.png) |
 
 ## Run it
 
