@@ -84,6 +84,31 @@ onSubmitPhoto(reqId, photoLabel), onResolve(reqId). Dense, professional, light t
 **Wiring (Claude):** props from `usePropertyData()`; triage via `POST /api/maintenance`
 (fallback `lib/maintenance.triageMaintenance`); `onTriage`→`addMaintenance`+`setTriage`,
 `onSubmitPhoto`→`addMaintenancePhoto`, `onResolve`→`resolveMaintenance`.
-<!-- P4 Notice board — TODO -->
+### P4 — Notice board (REQ #5)  ✅ backend ready
+
+> Prepend the shared context block above, then:
+
+```
+Build a "Notice board" page for a landlord CRM — compose + schedule SMS/email notices to
+tenants. Two columns.
+
+LEFT "New notice" card: an Audience segmented control (All tenants / Property / Tenant) —
+when Property or Tenant is chosen, show a dropdown to pick which; a Channel segmented
+control (SMS / Email with icons); a row of one-tap template chips (Rent reminder,
+Inspection, Gas safety, Bin day change, Holiday hours) that fill the body; a message
+textarea; a datetime-local "Send at" input; and a "Schedule notice" button.
+
+RIGHT: two stacked cards — "Scheduled (n)": each item shows audience label, channel pill,
+the message, the scheduled time (amber clock), and a "Send now" button. "Sent (n)": each
+item shows audience label, an "auto" badge when auto-generated (indigo), channel pill, the
+message, and the sent time (green tick).
+
+Props (no fetching): notices[], properties[], tenants[], and callbacks onSchedule(form),
+onSendNow(id). Dense, professional, light theme.
+```
+
+**Wiring (Claude):** props from `usePropertyData()` + `lib/notices` (`noticeTargetLabel`,
+`NOTICE_TEMPLATES`, `defaultScheduleLocal`); `onSchedule`→`scheduleNotice`,
+`onSendNow`→`sendNotice`. Auto late-rent reminders come from `generateLateReminders`.
 <!-- P5 Social aggregator — TODO -->
 <!-- P6 Q&A agent — TODO -->

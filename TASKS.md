@@ -56,8 +56,8 @@ ForgeCRM (final product name TBD in deck). App lives in `forgecrm/`; branch = `p
 ## Phase 4 — REQ #5: Automated per-property notice board  ⭐ (Management)
 | ID | Task | Owner | Status | Notes |
 |----|------|-------|--------|-------|
-| 4.1 | Notice/scheduling logic `lib/notices.ts` — compose, target property/tenant(s), schedule (datetime / recurring), status scheduled→sent, channel (SMS/email) | Claude | ⬜ | "send" simulated (toast + status); a tick advances due scheduled→sent |
-| 4.2 | Notice board UI: compose, pick property/tenants, schedule, queue of scheduled+sent, templates | 🅥 v0 | ⬜ | v0 prompt; Claude wires. Reuse marketing-maker shape |
+| 4.1 | Scheduling logic — store (`scheduleNotice`/`sendNotice`/`sendDueNotices`/`generateLateReminders`) + `lib/notices.ts` (target labels, templates, default time) | Claude | ✅ | state machine in store; helpers in lib |
+| 4.2 | Notice board page `app/notices/page.tsx` + nav | Claude→🅥 | 🔄 | **Functional DONE + verified** (compose w/ audience+channel+templates+schedule; Scheduled(2)+Sent(1 auto) queues, send-now, 0 errors). v0 prompt ready |
 
 ## Phase 5 — REQ #1: Social media post aggregator  ⭐ (Attraction)
 | ID | Task | Owner | Status | Notes |
