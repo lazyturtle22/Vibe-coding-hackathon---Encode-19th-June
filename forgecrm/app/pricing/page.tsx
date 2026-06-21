@@ -213,16 +213,16 @@ export default function PricingPage() {
                   <div className="border-b px-4 py-2.5 text-sm font-medium">Affected accounts</div>
                   <div className="divide-y">
                     {sim.affected.map((r) => (
-                      <div key={r.accountId} className="flex items-center justify-between px-4 py-2.5 text-sm">
+                      <div key={r.accountId} className="flex flex-wrap items-center justify-between gap-y-1 px-4 py-2.5 text-sm">
                         <Link href={`/accounts/${r.accountId}`} className="font-medium hover:underline">
                           {r.accountName}
                         </Link>
-                        <div className="flex items-center gap-3 tabular-nums">
+                        <div className="flex items-center gap-2 tabular-nums">
                           <span className="text-muted-foreground">{formatGBP(r.current)}</span>
-                          <ArrowRight className="size-3 text-muted-foreground" />
+                          <ArrowRight className="size-3 shrink-0 text-muted-foreground" />
                           <span>{formatGBP(r.proposed)}</span>
                           <span
-                            className={`w-20 text-right font-medium ${r.delta > 0 ? "text-emerald-600" : "text-rose-600"}`}
+                            className={`font-medium ${r.delta > 0 ? "text-emerald-600" : "text-rose-600"}`}
                           >
                             {r.delta > 0 ? "+" : "−"}
                             {formatGBP(Math.abs(r.delta))}
@@ -243,7 +243,7 @@ export default function PricingPage() {
                   </div>
                   <div className="divide-y divide-amber-100">
                     {sim.protectedRows.map((r) => (
-                      <div key={r.accountId} className="flex items-center justify-between px-4 py-2 text-sm">
+                      <div key={r.accountId} className="flex flex-wrap items-center justify-between gap-y-0.5 px-4 py-2 text-sm">
                         <span className="font-medium">{r.accountName}</span>
                         <span className="tabular-nums text-amber-700">
                           {r.wouldBeDelta > 0

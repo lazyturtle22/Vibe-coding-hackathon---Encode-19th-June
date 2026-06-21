@@ -95,16 +95,18 @@ export default function Account360() {
       {tags.length > 0 && <div className="mb-6"><TagChips tags={tags} /></div>}
 
       <Tabs defaultValue="billing">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
-          <TabsTrigger value="deals">Deals</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto">
+          <TabsList className="w-full sm:w-auto">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="activity">Activity</TabsTrigger>
+            <TabsTrigger value="billing">Billing</TabsTrigger>
+            <TabsTrigger value="deals">Deals</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* OVERVIEW */}
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Card className="gap-0 p-0">
               <div className="border-b px-4 py-3 text-sm font-semibold">Contacts</div>
               <div className="divide-y">
@@ -189,7 +191,7 @@ export default function Account360() {
 
         {/* BILLING */}
         <TabsContent value="billing" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <div className="mb-2 text-sm font-medium">Current invoice</div>
               {invoice ? <InvoiceView invoice={invoice} /> : <p className="text-sm text-muted-foreground">No subscription.</p>}

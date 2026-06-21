@@ -60,7 +60,7 @@ export default function SupportPage() {
         subtitle="Deterministic triage routes tickets by category and revenue risk — high-value or at-risk accounts escalate to a human, the rest auto-resolve."
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Intake */}
         <Card className="gap-0 p-5">
           <div className="flex items-center gap-2 text-sm font-semibold">
