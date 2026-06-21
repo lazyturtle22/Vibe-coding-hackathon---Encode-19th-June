@@ -1,5 +1,20 @@
 # ForgeCRM — Changelog
 
+## [PIVOT] Property-management reframe — kickoff (branch `property-pivot`)
+
+ForgeCRM repositions from a usage-based-billing B2B CRM to its real product (per the pitch deck):
+an **AI-native CRM for private accommodation landlords**. Driven by 5 stakeholder requirements
+(social aggregator, chat-log Q&A agent, rent/deposit/bill tracker, maintenance support, automated
+notice board). The NL pricing engine is **scrapped** ("don't vibe-code your pricing" — the model is
+a flat £40/£90 subscription). Financial theme de-emphasised but retained where it serves rent/bills.
+
+- Branched `property-pivot` off the up-to-date `main` (all prior work + collaborator's mobile pass).
+- Added **`TASKS.md`** (durable, resumable task table — backend=Claude, important UI=v0) and
+  **`V0_PROMPTS.md`** (v0 handoff prompts). See `TASKS.md` for the full phase plan.
+- **Revert effect:** this is additive (planning docs only); no app code changed yet.
+
+
+
 All changes on the `coder-a-engine-and-brand` branch. Each entry maps to a single
 commit so it can be reverted independently with `git revert <sha>`.
 
